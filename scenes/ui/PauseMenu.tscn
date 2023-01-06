@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/ui/BaseMenu.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/ui/BaseButton.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/PauseMenu.gd" type="Script" id=3]
+
+[node name="PauseMenu" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+
+[node name="Title" parent="NinePatchRect/MarginContainer/ContentContainer" index="0"]
+text = "Paused"
+
+[node name="ResumeButton" parent="NinePatchRect/MarginContainer/ContentContainer/ButtonContainer" index="0" instance=ExtResource( 2 )]
+margin_top = 1.0
+margin_right = 256.0
+margin_bottom = 12.0
+text = "Resume"
+
+[node name="OptionsButton" parent="NinePatchRect/MarginContainer/ContentContainer/ButtonContainer" index="1" instance=ExtResource( 2 )]
+margin_top = 20.0
+margin_right = 256.0
+margin_bottom = 31.0
+text = "Options"
+
+[node name="MainMenuButton" parent="NinePatchRect/MarginContainer/ContentContainer/ButtonContainer" index="2" instance=ExtResource( 2 )]
+margin_top = 39.0
+margin_right = 256.0
+margin_bottom = 50.0
+text = "Main Menu"
+
+[connection signal="pressed" from="NinePatchRect/MarginContainer/ContentContainer/ButtonContainer/ResumeButton" to="." method="_on_ResumeButton_pressed"]
+[connection signal="pressed" from="NinePatchRect/MarginContainer/ContentContainer/ButtonContainer/OptionsButton" to="." method="_on_OptionsButton_pressed"]
+[connection signal="pressed" from="NinePatchRect/MarginContainer/ContentContainer/ButtonContainer/MainMenuButton" to="." method="_on_MainMenuButton_pressed"]

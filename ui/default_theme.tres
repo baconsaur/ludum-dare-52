@@ -1,0 +1,43 @@
+[gd_resource type="Theme" load_steps=8 format=2]
+
+[ext_resource path="res://ui/fonts/body_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://sprites/bar_outline.png" type="Texture" id=2]
+[ext_resource path="res://sprites/bar_fill.png" type="Texture" id=3]
+[ext_resource path="res://sprites/bar_grabber.png" type="Texture" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxTexture" id=3]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 8, 8 )
+margin_left = 2.0
+margin_right = 2.0
+margin_top = 3.0
+margin_bottom = 3.0
+expand_margin_right = 4.0
+
+[sub_resource type="StyleBoxTexture" id=2]
+texture = ExtResource( 2 )
+region_rect = Rect2( 0, 0, 8, 8 )
+margin_left = 5.0
+margin_right = 5.0
+margin_top = 5.0
+margin_bottom = 5.0
+
+[resource]
+default_font = ExtResource( 1 )
+Button/styles/disabled = SubResource( 1 )
+Button/styles/focus = SubResource( 1 )
+Button/styles/hover = SubResource( 1 )
+Button/styles/normal = SubResource( 1 )
+Button/styles/pressed = SubResource( 1 )
+HSlider/icons/grabber = ExtResource( 4 )
+HSlider/icons/grabber_highlight = ExtResource( 4 )
+HSlider/styles/grabber_area = SubResource( 3 )
+HSlider/styles/grabber_area_highlight = SubResource( 3 )
+HSlider/styles/slider = SubResource( 2 )
+MarginContainer/constants/margin_bottom = 32
+MarginContainer/constants/margin_left = 16
+MarginContainer/constants/margin_right = 16
+MarginContainer/constants/margin_top = 32
+VBoxContainer/constants/separation = 8
