@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tetralogo-large.png-b1109cf16e066f6b24b519378091d076.stex"
+path="res://.import/terrain_placeholder.png-2dc3d6bc0699f82ab91a0a4b0eb841e5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/tetralogo-large.png"
-dest_files=[ "res://.import/tetralogo-large.png-b1109cf16e066f6b24b519378091d076.stex" ]
+source_file="res://sprites/terrain_placeholder.png"
+dest_files=[ "res://.import/terrain_placeholder.png-2dc3d6bc0699f82ab91a0a4b0eb841e5.stex" ]
 
 [params]
 

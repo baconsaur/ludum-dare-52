@@ -14,7 +14,8 @@ script = ExtResource( 3 )
 [node name="Menu" parent="." instance=ExtResource( 1 )]
 
 [node name="Title" parent="Menu/NinePatchRect/MarginContainer/ContentContainer" index="0"]
-text = "Game Title"
+grow_horizontal = 2
+text = "Ludum Dare 52"
 
 [node name="StartButton" parent="Menu/NinePatchRect/MarginContainer/ContentContainer/ButtonContainer" index="0" instance=ExtResource( 2 )]
 margin_top = 11.0

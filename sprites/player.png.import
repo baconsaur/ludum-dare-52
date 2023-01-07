@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tetralogo-large.png-b1109cf16e066f6b24b519378091d076.stex"
+path="res://.import/player.png-f534b8a02ffb80eefc72936296201445.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/tetralogo-large.png"
-dest_files=[ "res://.import/tetralogo-large.png-b1109cf16e066f6b24b519378091d076.stex" ]
+source_file="res://sprites/player.png"
+dest_files=[ "res://.import/player.png-f534b8a02ffb80eefc72936296201445.stex" ]
 
 [params]
 
