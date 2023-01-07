@@ -42,4 +42,6 @@ MarginContainer/constants/margin_bottom = 32
 MarginContainer/constants/margin_left = 16
 MarginContainer/constants/margin_right = 16
 MarginContainer/constants/margin_top = 32
+ProgressBar/styles/bg = SubResource( 2 )
+ProgressBar/styles/fg = SubResource( 3 )
 VBoxContainer/constants/separation = 8
