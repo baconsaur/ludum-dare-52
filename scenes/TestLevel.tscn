@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://sprites/terrain_placeholder.png" type="Texture" id=1]
-[ext_resource path="res://scenes/seeds/ShieldSeed.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scripts/Level.gd" type="Script" id=3]
 [ext_resource path="res://scenes/Checkpoint.tscn" type="PackedScene" id=4]
-[ext_resource path="res://scenes/seeds/PlasmaSeed.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/enemies/PlasmaEnemy.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/enemies/ShieldEnemy.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16, 16 )
@@ -76,17 +76,11 @@ shape = SubResource( 1 )
 [node name="Checkpoint" parent="." instance=ExtResource( 4 )]
 position = Vector2( 1394, 202 )
 
-[node name="PlasmaSeed" parent="Checkpoint" instance=ExtResource( 5 )]
-position = Vector2( -113, 2 )
+[node name="PlasmaEnemy" parent="." instance=ExtResource( 6 )]
+position = Vector2( 451, 121 )
 
-[node name="PlasmaSeed" parent="." instance=ExtResource( 5 )]
-position = Vector2( 166, 171 )
+[node name="PlasmaEnemy2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1179, 98 )
 
-[node name="ShieldSeed" parent="." instance=ExtResource( 2 )]
-position = Vector2( 344, 117 )
-
-[node name="ShieldSeed2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 579, 197 )
-
-[node name="PlasmaSeed2" parent="." instance=ExtResource( 5 )]
-position = Vector2( 1165, 95 )
+[node name="ShieldEnemy" parent="." instance=ExtResource( 7 )]
+position = Vector2( 836, 150 )

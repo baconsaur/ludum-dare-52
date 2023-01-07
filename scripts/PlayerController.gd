@@ -9,6 +9,9 @@ export var max_hp = 10
 export var move_speed = 100
 export var jump_power = 400
 export var fall_gravity_modifier = 2
+export var knockback_distance = 20
+export var attack_cooldown = 0.5
+export var attack_countdown = 0
 
 var gravity = 981
 var falling = false
@@ -16,14 +19,18 @@ var velocity = Vector2.ZERO
 var equipment = []
 var focused_planter
 var current_hp = max_hp
+var default_projectile = preload("res://scenes/DefaultProjectile.tscn")
 
 onready var sprite = $Sprite
 
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("debug"):
-		hit(1)
-		
+	if attack_countdown >= 0:
+		attack_countdown -= delta
+	elif Input.is_action_just_pressed("fire"):
+		fire()
+		attack_countdown = attack_cooldown
+	
 	if Input.is_action_just_pressed("interact"):
 		interact()
 
@@ -79,8 +86,19 @@ func hit(damage):
 	if current_hp <= 0:
 		emit_signal("die")
 
+func knockback():
+	# TODO make this smoother
+	position.x -= knockback_distance
+
 func set_planter(planter):
 	focused_planter = planter
+
+func fire():
+	var projectile = default_projectile.instance()
+	get_parent().add_child(projectile)
+	var direction = -1 if sprite.flip_h else 1
+	projectile.set_direction(direction)
+	projectile.position = Vector2(position.x + (5 * direction), position.y)
 
 func interact():
 	if focused_planter:
