@@ -1,18 +1,19 @@
 extends KinematicBody2D
 
-signal inventory_change
+signal add_seed
+signal plant_seed
 
+export var max_hp = 10
 export var move_speed = 100
 export var jump_power = 400
 export var fall_gravity_modifier = 2
-export var max_inventory_size = 5
 
 var gravity = 981
 var falling = false
 var velocity = Vector2.ZERO
-var inventory = []
-var explore_inventory = []
+var equipment = []
 var focused_planter
+var current_hp = max_hp
 
 onready var sprite = $Sprite
 
@@ -57,9 +58,11 @@ func _physics_process(delta):
 		sprite.play("idle")
 
 func pickup(seed_name):
-	if inventory.size() < max_inventory_size:
-		inventory.append(seed_name)
-		emit_signal("inventory_change", inventory)
+	emit_signal("add_seed", seed_name)
+
+func spawn(pos):
+	current_hp = max_hp
+	position = pos
 
 func set_planter(planter):
 	focused_planter = planter
@@ -69,8 +72,6 @@ func interact():
 		if focused_planter.has_plant():
 			var item = focused_planter.harvest()
 			if item:
-				explore_inventory.append(item)
-		elif inventory.size() > 0:
-			var next_seed = inventory.pop_back() # TODO make selectable
-			emit_signal("inventory_change", inventory)
-			focused_planter.plant(next_seed)
+				equipment.append(item)
+		else:
+			emit_signal("plant_seed", focused_planter)

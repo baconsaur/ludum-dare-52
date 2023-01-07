@@ -14,6 +14,11 @@ func has_plant():
 	if seed_type:
 		return true
 
+func reset():
+	seed_type = null
+	plant_sprite.set_sprite_frames(null)
+	growth_stage = 0
+
 func plant(seed_type_name):
 	seed_type = seed_type_name
 	plant_sprite.set_sprite_frames(load(plant_data[seed_type]["animation_frames"]))
@@ -32,9 +37,9 @@ func harvest():
 	var this_plant = plant_data[seed_type]
 	if growth_stage < this_plant["growth_time"]:
 		return
-	seed_type = null
-	plant_sprite.set_sprite_frames(null)
-	return this_plant["item"]
+	var item = seed_type
+	reset()
+	return item
 
 func _on_Planter_body_entered(body):
 	if body.name == "Player":

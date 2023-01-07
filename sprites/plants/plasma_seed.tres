@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=2]
+
+[ext_resource path="res://sprites/plasma_plant.png" type="Texture" id=1]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 1 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 1 )
+region = Rect2( 96, 0, 32, 32 )
+
+[resource]
+animations = [ {
+"frames": [ SubResource( 1 ) ],
+"loop": false,
+"name": "stage0",
+"speed": 12.0
+}, {
+"frames": [ SubResource( 2 ) ],
+"loop": false,
+"name": "stage1",
+"speed": 12.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": false,
+"name": "stage2",
+"speed": 12.0
+}, {
+"frames": [ SubResource( 4 ) ],
+"loop": false,
+"name": "stage3",
+"speed": 12.0
+} ]
