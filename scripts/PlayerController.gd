@@ -8,12 +8,17 @@ var gravity = 981
 var falling = false
 var velocity = Vector2.ZERO
 var inventory = []
+var explore_inventory = []
+var focused_planter
 
 onready var sprite = $Sprite
 
 
 func _physics_process(delta):
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("interact"):
+		interact()
+
+	if Input.is_action_just_pressed("up") and is_on_floor():
 		sprite.play("jump")
 		velocity.y = -jump_power
 	
@@ -51,3 +56,16 @@ func _physics_process(delta):
 func pickup(seed_name):
 	inventory.append(seed_name)
 	print(inventory)
+
+func set_planter(planter):
+	focused_planter = planter
+
+func interact():
+	if focused_planter:
+		if focused_planter.has_plant():
+			var item = focused_planter.harvest()
+			if item:
+				explore_inventory.append(item)
+		elif inventory.size() > 0:
+			var next_seed = inventory.pop_back() # TODO make selectable
+			focused_planter.plant(next_seed)

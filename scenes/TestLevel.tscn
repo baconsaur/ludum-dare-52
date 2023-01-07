@@ -85,4 +85,4 @@ position = Vector2( 306, 129 )
 position = Vector2( 800, 152 )
 
 [node name="Checkpoint" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1459, 203 )
+position = Vector2( 246, 120 )

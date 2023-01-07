@@ -5,6 +5,7 @@ export var player_spawn = Vector2.ZERO
 
 var current_level = 0
 var loaded_level
+var step_plant_growth = false
 
 onready var ui = $CanvasLayer/UI
 onready var player = $Player
@@ -18,7 +19,7 @@ func enter_greenhouse():
 func complete_level():
 	loaded_level.queue_free()
 	current_level += 1
-	# TODO process plant growth
+	step_plant_growth = true
 	enter_greenhouse()
 
 func enter_exploration():
@@ -31,3 +32,8 @@ func enter_exploration():
 
 func _on_Greenhouse_checkpoint_activated():
 	enter_exploration()
+
+
+func _on_Greenhouse_child_entered_tree(node):
+	if node.is_in_group("planters") and step_plant_growth:
+		node.step()

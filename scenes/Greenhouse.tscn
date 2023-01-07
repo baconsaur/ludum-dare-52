@@ -22,31 +22,19 @@ texture = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="Planter" parent="." instance=ExtResource( 2 )]
-position = Vector2( 55, 173 )
-
-[node name="Planter2" parent="." instance=ExtResource( 2 )]
-position = Vector2( 81, 173 )
+position = Vector2( 34, 173 )
 
 [node name="Planter3" parent="." instance=ExtResource( 2 )]
-position = Vector2( 107, 173 )
-
-[node name="Planter4" parent="." instance=ExtResource( 2 )]
-position = Vector2( 133, 173 )
+position = Vector2( 86, 173 )
 
 [node name="Planter5" parent="." instance=ExtResource( 2 )]
-position = Vector2( 159, 173 )
-
-[node name="Planter6" parent="." instance=ExtResource( 2 )]
-position = Vector2( 185, 173 )
+position = Vector2( 138, 173 )
 
 [node name="Planter7" parent="." instance=ExtResource( 2 )]
-position = Vector2( 211, 173 )
-
-[node name="Planter8" parent="." instance=ExtResource( 2 )]
-position = Vector2( 237, 173 )
+position = Vector2( 190, 173 )
 
 [node name="Planter9" parent="." instance=ExtResource( 2 )]
-position = Vector2( 263, 173 )
+position = Vector2( 242, 173 )
 
 [node name="Checkpoint" parent="." instance=ExtResource( 4 )]
 position = Vector2( 299, 173 )
