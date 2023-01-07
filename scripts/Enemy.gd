@@ -10,13 +10,19 @@ var max_hp
 var current_hp
 var touch_damage
 var seed_type
-var action_type
-var action_cooldown
+var ability_type
+var ability_cooldown
 var seed_obj
 var stunned = false
 var stun_countdown = 0
-var action_countdown = 0
+var ability_countdown = 0
 var dead = false
+var dropped_seed = false
+var player
+
+# Abilities
+var plasma_obj = preload("res://scenes/abilities/Plasma.tscn")
+var shield_obj = preload("res://scenes/abilities/Shield.tscn")
 
 onready var sprite = $AnimatedSprite
 onready var collider = $CollisionShape2D
@@ -29,8 +35,8 @@ func _ready():
 	var enemy_data = globals.enemy_data[enemy_type]
 	touch_damage = enemy_data["touch_damage"]
 	seed_type = enemy_data["seed_type"]
-	action_type = enemy_data["action_type"]
-	action_cooldown = enemy_data["action_cooldown"]
+	ability_type = enemy_data["ability_type"]
+	ability_cooldown = enemy_data["ability_cooldown"]
 	max_hp = enemy_data["max_hp"]
 	current_hp = max_hp
 	
@@ -52,13 +58,18 @@ func _process(delta):
 		else:
 			return
 	
-	action_countdown -= delta
-	if action_countdown <= 0:
-		do_action()
-		action_countdown = action_cooldown
-
-func do_action():
-	print(action_type)
+	if not player:
+		return
+	
+	if position.x - player.position.x < 0:
+		sprite.set_flip_h(true)
+	else:
+		sprite.set_flip_h(false)
+	
+	ability_countdown -= delta
+	if ability_countdown <= 0:
+		call_deferred(ability_type)
+		ability_countdown = ability_cooldown
 
 func stun():
 	sprite.play("stunned")
@@ -77,21 +88,55 @@ func hit(damage):
 		call_deferred("drop_seeds")
 
 func die():
-	call_deferred("drop_seeds")
 	sprite.play("die")
 	dead = true
 	collider.disabled = true
+	call_deferred("drop_seeds")
 
 func drop_seeds():
-	# TODO add limit
-	var drop_x = randi() % drop_range - drop_range / 2
-	drop_x += drop_offset_x if drop_x > 0 else -drop_offset_x
-	var seed_instance = seed_obj.instance()
-	seed_instance.position = Vector2(position.x + drop_x, position.y + drop_offset_y)
-	get_parent().add_child(seed_instance)
+	# Drop a max of one seed before death
+	var num_drops = 0
+	if dead:
+		# Drop 1-2 on death
+		num_drops = randi() % 2 + 1
+	elif not dropped_seed:
+		num_drops = 1
+		dropped_seed = true
+	for i in range(num_drops):
+		# TODO nice drop animation
+		var drop_x = randi() % drop_range - drop_range / 2
+		drop_x += drop_offset_x if drop_x > 0 else -drop_offset_x
+		var seed_instance = seed_obj.instance()
+		seed_instance.position = Vector2(position.x + drop_x, position.y + drop_offset_y)
+		get_parent().add_child(seed_instance)
 
 func _on_Enemy_body_entered(body):
-	if body.name == "Player":
-		if touch_damage and not stunned:
-			body.hit(touch_damage)
-			body.knockback()
+	if body.name != "Player":
+		return
+	if touch_damage and not stunned:
+		body.hit(touch_damage)
+		body.knockback()
+
+
+func _on_SightRange_body_entered(body):
+	if body.name != "Player":
+		return
+	player = body
+
+
+func _on_SightRange_body_exited(body):
+	if body.name != "Player":
+		return
+	player = null
+
+
+### ABILITY FUNCTIONS (TODO: refactor this nightmare) ###
+
+func plasma():
+	var plasma = plasma_obj.instance()
+	get_parent().add_child(plasma)
+	var direction = 1 if sprite.flip_h else -1
+	plasma.set_start(position, direction)
+
+func shield():
+	pass

@@ -97,8 +97,7 @@ func fire():
 	var projectile = default_projectile.instance()
 	get_parent().add_child(projectile)
 	var direction = -1 if sprite.flip_h else 1
-	projectile.set_direction(direction)
-	projectile.position = Vector2(position.x + (5 * direction), position.y)
+	projectile.set_start(position, direction, true)
 
 func interact():
 	if focused_planter:

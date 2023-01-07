@@ -19,15 +19,15 @@ var enemy_data = {
 	"plasma": {
 		"touch_damage": 1,
 		"seed_type": "plasma",
-		"action_type": "plasma",
-		"action_cooldown": 2,
+		"ability_type": "plasma",
+		"ability_cooldown": 2,
 		"max_hp": 1,
 	},
 	"shield": {
 		"touch_damage": 1,
 		"seed_type": "shield",
-		"action_type": "shield",
-		"action_cooldown": 1,
+		"ability_type": "shield",
+		"ability_cooldown": 1,
 		"max_hp": 1,
 	}
 }
