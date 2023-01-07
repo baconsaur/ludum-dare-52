@@ -27,7 +27,7 @@ var enemy_data = {
 		"touch_damage": 1,
 		"seed_type": "shield",
 		"ability_type": "shield",
-		"ability_cooldown": 1,
+		"ability_cooldown": 2,
 		"max_hp": 1,
 	}
 }

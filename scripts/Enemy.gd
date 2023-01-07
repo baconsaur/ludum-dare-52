@@ -139,4 +139,5 @@ func plasma():
 	plasma.set_start(position, direction)
 
 func shield():
-	pass
+	var shield = shield_obj.instance()
+	add_child(shield)
