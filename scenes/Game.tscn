@@ -3,13 +3,13 @@
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/UI.gd" type="Script" id=2]
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://sprites/terrain_placeholder.png" type="Texture" id=4]
-
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 16, 16 )
+[ext_resource path="res://scenes/TestLevel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Greenhouse.tscn" type="PackedScene" id=5]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
+levels = [ ExtResource( 4 ), ExtResource( 4 ), ExtResource( 4 ) ]
+player_spawn = Vector2( 162, 134 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -27,22 +27,6 @@ position = Vector2( 162, 134 )
 [node name="Camera2D" type="Camera2D" parent="Player"]
 current = true
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-position = Vector2( 159, 205 )
-scale = Vector2( 10.04, 1 )
+[node name="Greenhouse" parent="." instance=ExtResource( 5 )]
 
-[node name="Sprite" type="Sprite" parent="StaticBody2D"]
-texture = ExtResource( 4 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-shape = SubResource( 1 )
-
-[node name="StaticBody2D2" type="StaticBody2D" parent="."]
-position = Vector2( 383, 153 )
-scale = Vector2( 10.04, 1 )
-
-[node name="Sprite" type="Sprite" parent="StaticBody2D2"]
-texture = ExtResource( 4 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
-shape = SubResource( 1 )
+[connection signal="checkpoint_activated" from="Greenhouse" to="." method="_on_Greenhouse_checkpoint_activated"]

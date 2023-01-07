@@ -7,6 +7,7 @@ export var fall_gravity_modifier = 2
 var gravity = 981
 var falling = false
 var velocity = Vector2.ZERO
+var inventory = []
 
 onready var sprite = $Sprite
 
@@ -46,3 +47,7 @@ func _physics_process(delta):
 		sprite.play("run")
 	elif is_on_floor():
 		sprite.play("idle")
+
+func pickup(seed_name):
+	inventory.append(seed_name)
+	print(inventory)
