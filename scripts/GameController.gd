@@ -8,11 +8,15 @@ var loaded_level
 var step_plant_growth = false
 
 onready var ui = $CanvasLayer/UI
+onready var seed_select = $CanvasLayer/UI/SeedSelect
 onready var player = $Player
 onready var greenhouse = $Greenhouse
 
+func _ready():
+	player.connect("inventory_change", seed_select, "update_inventory")
 
 func enter_greenhouse():
+	seed_select.show()
 	call_deferred("add_child", greenhouse)
 	player.position = player_spawn
 
@@ -23,6 +27,7 @@ func complete_level():
 	enter_greenhouse()
 
 func enter_exploration():
+	seed_select.hide()
 	call_deferred("remove_child", greenhouse)
 	loaded_level = levels[current_level].instance()
 	call_deferred("add_child", loaded_level)

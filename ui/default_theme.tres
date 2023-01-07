@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=8 format=2]
+[gd_resource type="Theme" load_steps=9 format=2]
 
 [ext_resource path="res://ui/fonts/body_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://sprites/bar_outline.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://sprites/bar_grabber.png" type="Texture" id=4]
 
 [sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=4]
 
 [sub_resource type="StyleBoxTexture" id=3]
 texture = ExtResource( 3 )
@@ -28,7 +30,7 @@ margin_bottom = 5.0
 default_font = ExtResource( 1 )
 Button/styles/disabled = SubResource( 1 )
 Button/styles/focus = SubResource( 1 )
-Button/styles/hover = SubResource( 1 )
+Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 1 )
 Button/styles/pressed = SubResource( 1 )
 HSlider/icons/grabber = ExtResource( 4 )
