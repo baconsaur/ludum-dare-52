@@ -53,7 +53,7 @@ func process_exploring_actions(delta):
 	
 	if ability_countdown >= 0:
 		ability_countdown -= delta
-	if Input.is_action_just_pressed("use_ability"):
+	elif Input.is_action_just_pressed("use_ability"):
 		use_ability()
 
 func process_shared_actions(delta):

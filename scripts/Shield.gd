@@ -1,6 +1,6 @@
 extends Area2D
 
-export var duration = 1
+export var duration: float = 2.5
 
 var time_left = duration
 var is_friendly = false
