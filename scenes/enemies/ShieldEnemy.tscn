@@ -8,3 +8,4 @@ enemy_type = "shield"
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = ExtResource( 2 )
+animation = "recover"

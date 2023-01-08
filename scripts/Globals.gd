@@ -51,6 +51,6 @@ var enemy_data = {
 	"shield": {
 		"touch_damage": 3,
 		"ability": ability_data["shield"],
-		"max_hp": 1,
+		"max_hp": 4,
 	}
 }

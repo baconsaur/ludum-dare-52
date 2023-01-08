@@ -21,7 +21,9 @@ var stun_countdown = 0
 var ability_countdown = 0
 var dead = false
 var dropped_seed = false
-var player
+var player = null
+var look_direction = -1
+var spawn_cooldown = 1
 
 var ability_obj
 
@@ -43,6 +45,8 @@ func _ready():
 	touch_damage = enemy_data["touch_damage"]
 	max_hp = enemy_data["max_hp"]
 	current_hp = max_hp
+	
+	sprite.play("idle")
 
 func _process(delta):
 	if dead:
@@ -52,26 +56,37 @@ func _process(delta):
 		stun_countdown -= delta
 		if stun_countdown <= 0:
 			stunned = false
-			sprite.play("idle")
-		else:
-			return
+			if sprite.is_connected("animation_finished", self, "transition_animation"):
+				sprite.disconnect("animation_finished", self, "transition_animation")
+			sprite.play("recover")
+			sprite.connect("animation_finished", self, "transition_animation", ["recover", "idle"], CONNECT_ONESHOT)
+		return
+	
+	if spawn_cooldown >= 0:
+		# Hacky bug fix I just don't have time to figure this one out
+		spawn_cooldown -= delta
+		return
 	
 	if not player:
 		return
 	
 	if position.x - player.position.x < 0:
-		sprite.set_flip_h(false)
+		look_direction = 1
 	else:
-		sprite.set_flip_h(true)
+		look_direction = -1
 	
 	ability_countdown -= delta
 	if ability_countdown <= 0:
+		sprite.play("action")
+		if sprite.is_connected("animation_finished", self, "transition_animation"):
+				sprite.disconnect("animation_finished", self, "transition_animation")
+		sprite.connect("animation_finished", self, "transition_animation", ["action", "idle"], CONNECT_ONESHOT)
 		var ability = ability_obj.instance()
 		ability.setup_instance(self)
 		ability_countdown = ability_cooldown
 
 func stun():
-	if dead:
+	if dead or stunned:
 		return
 
 	sprite.play("stunned")
@@ -87,6 +102,10 @@ func hit(damage):
 	if current_hp <= 0:
 		die()
 	else:
+		sprite.play("hit")
+		if sprite.is_connected("animation_finished", self, "transition_animation"):
+				sprite.disconnect("animation_finished", self, "transition_animation")
+		sprite.connect("animation_finished", self, "transition_animation", ["hit", "idle"], CONNECT_ONESHOT)
 		call_deferred("drop_seeds")
 
 func die():
@@ -111,6 +130,11 @@ func drop_seeds():
 		seed_instance.position = Vector2(position.x + drop_x, position.y + drop_offset_y)
 		get_parent().add_child(seed_instance)
 
+func transition_animation(last, next):
+	if sprite.animation != last:
+		return
+	sprite.play(next)
+
 func _on_Enemy_body_entered(body):
 	if dead:
 		return
@@ -124,12 +148,18 @@ func _on_Enemy_body_entered(body):
 
 
 func _on_SightRange_body_entered(body):
+	if spawn_cooldown >= 0:
+		return
+
 	if body.name != "Player":
 		return
 	player = body
 
 
 func _on_SightRange_body_exited(body):
+	if spawn_cooldown >= 0:
+		return
+
 	if body.name != "Player":
 		return
 	player = null

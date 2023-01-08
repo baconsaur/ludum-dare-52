@@ -30,6 +30,7 @@ var current_weapon
 var attack_countdown = 0
 var ability_countdown = 0
 var last_animation = "idle"
+var look_direction = 1
 
 onready var sprite = $Sprite
 
@@ -80,8 +81,10 @@ func process_shared_actions(delta):
 		velocity.x = direction * move_speed
 		if direction < 0:
 			sprite.set_flip_h(true)
+			look_direction = -1
 		else:
 			sprite.set_flip_h(false)
+			look_direction = 1
 	else:
 		velocity.x = move_toward(velocity.x, 0, move_speed)
 
