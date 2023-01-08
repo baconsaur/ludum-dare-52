@@ -33,6 +33,10 @@ func _ready():
 	ability_select.connect("select_item", player, "set_active_ability")
 
 func _process(_delta):
+	if Input.is_action_just_pressed("debug"):
+		var item = ability_data["shield"]
+		ability_select.add(item)
+		
 	if Input.is_action_just_pressed("select_left"):
 		if loaded_level:
 			ability_select.select_next()

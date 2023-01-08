@@ -137,15 +137,13 @@ func set_active_ability(ability_name):
 
 func fire():
 	var projectile = current_weapon["loaded_object"].instance()
-	get_parent().add_child(projectile)
-	var direction = -1 if sprite.flip_h else 1
-	projectile.set_start(position, direction, true)
+	projectile.setup_instance(self)
 	attack_countdown = current_weapon["cooldown"]
 	emit_signal("use_weapon", current_weapon["name"])
 
 func use_ability():
 	var ability = current_ability["loaded_object"].instance()
-	add_child(ability)
+	ability.setup_instance(self)
 	ability_countdown = current_ability["cooldown"]
 	emit_signal("use_ability", current_ability["name"])
 

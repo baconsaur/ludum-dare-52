@@ -18,10 +18,12 @@ func _process(delta):
 	if distance_traveled > max_distance:
 		destroy()
 
-func set_start(start_pos, direction, friendly=false):
+func setup_instance(owner):
+	var direction = -1 if owner.sprite.flip_h else 1
 	move_speed *= direction
-	position = Vector2(start_pos.x + (5 * direction), start_pos.y)
-	is_friendly = friendly
+	position = Vector2(owner.position.x + (5 * direction), owner.position.y)
+	is_friendly = owner.name == "Player"
+	owner.get_parent().add_child(self)
 
 func destroy():
 	# TODO add a nice explosion?
@@ -44,4 +46,5 @@ func _on_Projectile_area_entered(area):
 			area.hit(damage)
 		destroy()
 	if area.is_in_group("shields") and not piercing:
-		destroy()
+		if is_friendly != area.is_friendly:
+			destroy()

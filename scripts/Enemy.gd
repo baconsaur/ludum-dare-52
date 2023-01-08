@@ -56,23 +56,27 @@ func _process(delta):
 		return
 	
 	if position.x - player.position.x < 0:
-		sprite.set_flip_h(true)
-	else:
 		sprite.set_flip_h(false)
+	else:
+		sprite.set_flip_h(true)
 	
 	ability_countdown -= delta
 	if ability_countdown <= 0:
-		call_deferred(ability_type)
+		var ability = ability_obj.instance()
+		ability.setup_instance(self)
 		ability_countdown = ability_cooldown
 
 func stun():
+	if dead:
+		return
+
 	sprite.play("stunned")
 	call_deferred("drop_seeds")
 	stunned = true
 	stun_countdown = stun_cooldown
 
 func hit(damage):
-	if damage <= 0:
+	if dead or damage <= 0:
 		return
 
 	current_hp -= damage
@@ -124,15 +128,3 @@ func _on_SightRange_body_exited(body):
 	if body.name != "Player":
 		return
 	player = null
-
-
-### ABILITY FUNCTIONS (TODO: refactor this nightmare) ###
-func plasma():
-	var plasma = ability_obj.instance()
-	get_parent().add_child(plasma)
-	var direction = 1 if sprite.flip_h else -1
-	plasma.set_start(position, direction)
-
-func shield():
-	var shield = ability_obj.instance()
-	add_child(shield)
