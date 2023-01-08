@@ -8,8 +8,11 @@ var loaded_level
 var step_plant_growth = false
 var new_seeds = []
 var ability_data
+var weapon_inventory = []
+var ability_inventory = []
 
 onready var ui = $CanvasLayer/UI
+onready var hud = $CanvasLayer/UI/HUD
 onready var player_hp = $CanvasLayer/UI/HUD/HP
 onready var seed_select = $CanvasLayer/UI/HUD/SeedSelect
 onready var ability_select = $CanvasLayer/UI/HUD/AbilitySelect
@@ -34,8 +37,8 @@ func _ready():
 
 func _process(_delta):
 	if Input.is_action_just_pressed("debug"):
-		var item = ability_data["shield"]
-		ability_select.add(item)
+		var item = ability_data["plasma"]
+		weapon_select.add(item)
 		
 	if Input.is_action_just_pressed("select_left"):
 		if loaded_level:
@@ -75,8 +78,10 @@ func enter_exploration():
 	call_deferred("add_child", loaded_level)
 	call_deferred("spawn_player", loaded_level, true)
 	loaded_level.connect("checkpoint_activated", self, "complete_level")
-	weapon_select.enable_select()
-	ability_select.enable_select()
+	
+	for inst in [weapon_select, ability_select]:
+		inst.enable_select()
+		inst.save_state()
 
 func spawn_player(level, exploring):
 	player.spawn(level.spawn.position, exploring)
@@ -98,6 +103,8 @@ func handle_death():
 		loaded_level.queue_free()
 	new_seeds = []
 	step_plant_growth = false
+	for inst in [weapon_select, ability_select]:
+		inst.restore_state()
 	enter_greenhouse()
 
 func handle_harvest_item(item_name):

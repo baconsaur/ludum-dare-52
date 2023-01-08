@@ -115,7 +115,8 @@ func _on_Enemy_body_entered(body):
 		return
 	if touch_damage and not stunned:
 		body.hit(touch_damage)
-		body.knockback()
+		var direction = -1 if sprite.flip_h else 1
+		body.knockback(direction)
 
 
 func _on_SightRange_body_entered(body):

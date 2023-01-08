@@ -6,6 +6,7 @@ signal select_item
 var items = {}
 var selected_item = null
 var select_enabled = false
+var saved_items = {}
 
 func disable_select():
 	select_item(null)
@@ -13,6 +14,18 @@ func disable_select():
 
 func enable_select():
 	select_enabled = true
+	select_first_child()
+
+func save_state():
+	saved_items = items.duplicate(true)
+
+func restore_state():
+	for child in get_children():
+		child.queue_free()
+
+	items = saved_items.duplicate(true)
+	for item in items:
+		add_icon(items[item])
 	select_first_child()
 
 func select_next():
@@ -41,10 +54,7 @@ func add(item_data, count=1):
 		add_new(items[item_name])
 
 func add_new(item_data):
-	var icon = load(item_data["icon"]).instance()
-	add_child(icon)
-	icon.setup(item_data["name"], item_data["count"] if item_data["count"] > 0 else "")
-	item_data["instance"] = icon
+	var icon = add_icon(item_data)
 	if not selected_item:
 		select_item(icon)
 
@@ -54,15 +64,22 @@ func remove(item_name):
 			items[item_name]["count"] -= 1
 			update_item(items[item_name])
 
+func add_icon(item_data):
+	var icon = load(item_data["icon"]).instance()
+	add_child(icon)
+	icon.setup(item_data["name"], item_data["count"] if item_data["count"] > 0 else "")
+	item_data["instance"] = icon
+	return icon
+
 func update_item(item):
 	if item["count"] > 0:
 		item["instance"].update_count(item["count"])
 	elif item["count"] < 0:
 		item["instance"].update_count("")
 	else:
+		item["instance"].connect("tree_exited", self, "select_first_child")
 		item["instance"].queue_free()
 		items.erase(item["name"])
-		call_deferred("select_first_child")
 
 func select_first_child():
 	if get_child_count():

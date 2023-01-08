@@ -12,7 +12,7 @@ export var max_hp = 10
 export var move_speed = 100
 export var jump_power = 400
 export var fall_gravity_modifier = 2
-export var knockback_distance = 20
+export var knockback_distance = 30
 
 var gravity = 981
 var falling = false
@@ -112,9 +112,9 @@ func hit(damage):
 	if current_hp <= 0:
 		emit_signal("die")
 
-func knockback():
+func knockback(direction):
 	# TODO make this smoother
-	position.x -= knockback_distance
+	position.x += knockback_distance * direction
 
 func set_planter(planter):
 	focused_planter = planter
@@ -142,6 +142,8 @@ func fire():
 	emit_signal("use_weapon", current_weapon["name"])
 
 func use_ability():
+	if not current_ability:
+		return
 	var ability = current_ability["loaded_object"].instance()
 	ability.setup_instance(self)
 	ability_countdown = current_ability["cooldown"]
