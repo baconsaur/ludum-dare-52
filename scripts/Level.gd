@@ -2,9 +2,8 @@ extends Node2D
 
 signal checkpoint_activated
 
-export var spawn_position = Vector2.ZERO
-
 onready var checkpoint = $Checkpoint
+onready var spawn = $Spawn
 
 func _ready():
 	checkpoint.connect("activated", self, "activate_checkpoint")

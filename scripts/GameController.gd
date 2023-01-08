@@ -69,10 +69,13 @@ func enter_exploration():
 	call_deferred("remove_child", greenhouse)
 	loaded_level = levels[current_level].instance()
 	call_deferred("add_child", loaded_level)
+	call_deferred("spawn_player")
 	loaded_level.connect("checkpoint_activated", self, "complete_level")
-	player.spawn(loaded_level.spawn_position, true)
 	weapon_select.enable_select()
 	ability_select.enable_select()
+
+func spawn_player():
+	player.spawn(loaded_level.spawn.position, true)
 
 func add_seed(seed_type):
 	new_seeds.append(seed_type)

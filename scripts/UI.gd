@@ -4,7 +4,7 @@ var pause_menu = preload("res://scenes/ui/PauseMenu.tscn")
 
 
 func _process(delta):
-	if Input.is_action_just_pressed("ui_cancel") and not get_tree().paused:
+	if Input.is_action_just_pressed("pause") and not get_tree().paused:
 		pause()
 
 

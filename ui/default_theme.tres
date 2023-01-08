@@ -1,9 +1,10 @@
-[gd_resource type="Theme" load_steps=9 format=2]
+[gd_resource type="Theme" load_steps=10 format=2]
 
 [ext_resource path="res://ui/fonts/body_font.tres" type="DynamicFont" id=1]
 [ext_resource path="res://sprites/bar_outline.png" type="Texture" id=2]
 [ext_resource path="res://sprites/bar_fill.png" type="Texture" id=3]
 [ext_resource path="res://sprites/bar_grabber.png" type="Texture" id=4]
+[ext_resource path="res://sprites/bar_grabber_active.png" type="Texture" id=5]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -28,13 +29,18 @@ margin_bottom = 5.0
 
 [resource]
 default_font = ExtResource( 1 )
+Button/colors/font_color = Color( 0.564706, 0.796078, 0.921569, 1 )
+Button/colors/font_color_disabled = Color( 0.411765, 0.384314, 0.564706, 1 )
+Button/colors/font_color_focus = Color( 0.964706, 0.937255, 0.803922, 1 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
 Button/styles/disabled = SubResource( 1 )
 Button/styles/focus = SubResource( 1 )
 Button/styles/hover = SubResource( 4 )
 Button/styles/normal = SubResource( 1 )
 Button/styles/pressed = SubResource( 1 )
 HSlider/icons/grabber = ExtResource( 4 )
-HSlider/icons/grabber_highlight = ExtResource( 4 )
+HSlider/icons/grabber_disabled = ExtResource( 4 )
+HSlider/icons/grabber_highlight = ExtResource( 5 )
 HSlider/styles/grabber_area = SubResource( 3 )
 HSlider/styles/grabber_area_highlight = SubResource( 3 )
 HSlider/styles/slider = SubResource( 2 )
