@@ -15,19 +15,42 @@ var plant_data = {
 	},
 }
 
+var ability_data = {
+	"default": {
+		"seed": null,
+		"type": "weapon",
+		"name": "default",
+		"icon": "res://scenes/ui/DefaultWeaponInfo.tscn",
+		"object": "res://scenes/abilities/DefaultProjectile.tscn",
+		"cooldown": 0.5,
+	},
+	"plasma": {
+		"seed": plant_data["plasma"],
+		"type": "weapon",
+		"name": "plasma",
+		"icon": "res://scenes/ui/PlasmaWeaponInfo.tscn",
+		"object": "res://scenes/abilities/Plasma.tscn",
+		"cooldown": 2,
+	},
+	"shield": {
+		"seed": plant_data["shield"],
+		"type": "ability",
+		"name": "shield",
+		"icon": "res://scenes/ui/ShieldAbilityInfo.tscn",
+		"object": "res://scenes/abilities/Shield.tscn",
+		"cooldown": 2,
+	}
+}
+
 var enemy_data = {
 	"plasma": {
 		"touch_damage": 1,
-		"seed_type": "plasma",
-		"ability_type": "plasma",
-		"ability_cooldown": 2,
+		"ability": ability_data["plasma"],
 		"max_hp": 1,
 	},
 	"shield": {
 		"touch_damage": 1,
-		"seed_type": "shield",
-		"ability_type": "shield",
-		"ability_cooldown": 2,
+		"ability": ability_data["shield"],
 		"max_hp": 1,
 	}
 }

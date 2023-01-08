@@ -4,36 +4,59 @@ signal add_seed
 signal plant_seed
 signal hp_change
 signal die
+signal harvest_item
+signal use_weapon
+signal use_ability
 
 export var max_hp = 10
 export var move_speed = 100
 export var jump_power = 400
 export var fall_gravity_modifier = 2
 export var knockback_distance = 20
-export var attack_cooldown = 0.5
-export var attack_countdown = 0
 
 var gravity = 981
 var falling = false
 var velocity = Vector2.ZERO
-var equipment = []
 var focused_planter
 var current_hp = max_hp
-var default_projectile = preload("res://scenes/DefaultProjectile.tscn")
+var is_exploring = false
+var ability_data
+var current_ability
+var current_weapon
+var attack_countdown = 0
+var ability_countdown = 0
 
 onready var sprite = $Sprite
 
+func _ready():
+	ability_data = get_node("/root/Globals").ability_data.duplicate(true)
 
 func _physics_process(delta):
+	process_exploring_actions(delta)
+	process_greenhouse_actions(delta)
+	process_shared_actions(delta)
+
+func process_greenhouse_actions(delta):
+	if is_exploring:
+		return
+	if Input.is_action_just_pressed("fire"):
+		interact()
+
+func process_exploring_actions(delta):
+	if not is_exploring:
+		return
+
 	if attack_countdown >= 0:
 		attack_countdown -= delta
 	elif Input.is_action_just_pressed("fire"):
 		fire()
-		attack_countdown = attack_cooldown
 	
-	if Input.is_action_just_pressed("interact"):
-		interact()
+	if ability_countdown >= 0:
+		ability_countdown -= delta
+	if Input.is_action_just_pressed("use_ability"):
+		use_ability()
 
+func process_shared_actions(delta):
 	if Input.is_action_just_pressed("up") and is_on_floor():
 		sprite.play("jump")
 		velocity.y = -jump_power
@@ -43,7 +66,7 @@ func _physics_process(delta):
 		effective_gravity += gravity * fall_gravity_modifier
 	elif velocity.y < 0 and falling:
 		effective_gravity += gravity
-		
+
 	velocity.y += effective_gravity * delta
 
 	var direction = Input.get_axis("left", "right")
@@ -72,10 +95,13 @@ func _physics_process(delta):
 func pickup(seed_name):
 	emit_signal("add_seed", seed_name)
 
-func spawn(pos):
+func spawn(pos, exploring):
 	current_hp = max_hp
 	emit_signal("hp_change", current_hp)
 	position = pos
+	attack_countdown = 0
+	ability_countdown = 0
+	is_exploring = exploring
 
 func hit(damage):
 	if damage <= 0:
@@ -93,17 +119,41 @@ func knockback():
 func set_planter(planter):
 	focused_planter = planter
 
+func set_active_weapon(weapon_name):
+	if weapon_name:
+		current_weapon = ability_data[weapon_name]
+	else:
+		current_weapon = ability_data["default"]
+	if not "loaded_object" in current_weapon:
+		current_weapon["loaded_object"] = load(current_weapon["object"])
+
+func set_active_ability(ability_name):
+	if ability_name:
+		current_ability = ability_data[ability_name]
+		if not "loaded_object" in current_ability:
+			current_ability["loaded_object"] = load(current_ability["object"])
+	else:
+		current_ability = null
+
 func fire():
-	var projectile = default_projectile.instance()
+	var projectile = current_weapon["loaded_object"].instance()
 	get_parent().add_child(projectile)
 	var direction = -1 if sprite.flip_h else 1
 	projectile.set_start(position, direction, true)
+	attack_countdown = current_weapon["cooldown"]
+	emit_signal("use_weapon", current_weapon["name"])
+
+func use_ability():
+	var ability = current_ability["loaded_object"].instance()
+	add_child(ability)
+	ability_countdown = current_ability["cooldown"]
+	emit_signal("use_ability", current_ability["name"])
 
 func interact():
 	if focused_planter:
 		if focused_planter.has_plant():
 			var item = focused_planter.harvest()
 			if item:
-				equipment.append(item)
+				emit_signal("harvest_item", item)
 		else:
 			emit_signal("plant_seed", focused_planter)

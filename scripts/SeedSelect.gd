@@ -3,11 +3,11 @@ extends Control
 var plant_data
 var selected_seed = 0
 
-onready var SeedButton = load("res://scripts/SeedButton.gd")
+onready var seed_button_obj = preload("res://scenes/ui/SeedButton.tscn")
 
 
 func _ready():
-	plant_data = get_node("/root/Globals").plant_data
+	plant_data = get_node("/root/Globals").plant_data.duplicate(true)
 
 func reset():
 	select_seed(0)
@@ -18,9 +18,9 @@ func remove_seed(index):
 	to_remove.queue_free()
 
 func add_seed(item):
-	var button = SeedButton.new()
+	var button = seed_button_obj.instance()
 	button.setup(item, plant_data[item].icon)
-	button.connect("pressed", self, "select_seed", [button])
+	button.connect("pressed", self, "select_seed", [get_child_count()])
 	add_child(button)
 
 func select_seed(index):
@@ -32,15 +32,9 @@ func select_seed(index):
 
 	for i in range(children.size()):
 		if i == selected_seed:
-			show_selection(children[i])
+			children[i].select()
 		else:
-			show_deselection(children[i])
-
-func show_selection(button):
-	button.modulate = Color.black
-
-func show_deselection(button):
-	button.modulate = Color.white
+			children[i].deselect()
 
 func select_left():
 	select_seed(selected_seed - 1)

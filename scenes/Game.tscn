@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/UI.gd" type="Script" id=2]
@@ -7,6 +7,9 @@
 [ext_resource path="res://scenes/Greenhouse.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scenes/ui/SeedSelect.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scenes/ui/HP.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/ui/WeaponSelect.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/ui/AbilitySelect.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/default_theme.tres" type="Theme" id=10]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -15,17 +18,33 @@ player_spawn = Vector2( 162, 134 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="UI" type="Control" parent="CanvasLayer"]
+[node name="UI" type="MarginContainer" parent="CanvasLayer"]
 pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource( 10 )
+custom_constants/margin_right = 8
+custom_constants/margin_top = 8
+custom_constants/margin_left = 8
+custom_constants/margin_bottom = 8
 script = ExtResource( 2 )
 
-[node name="SeedSelect" parent="CanvasLayer/UI" instance=ExtResource( 6 )]
+[node name="HUD" type="Control" parent="CanvasLayer/UI"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 312.0
+margin_bottom = 232.0
 
-[node name="HP" parent="CanvasLayer/UI" instance=ExtResource( 7 )]
+[node name="SeedSelect" parent="CanvasLayer/UI/HUD" instance=ExtResource( 6 )]
+
+[node name="HP" parent="CanvasLayer/UI/HUD" instance=ExtResource( 7 )]
+visible = false
+
+[node name="WeaponSelect" parent="CanvasLayer/UI/HUD" instance=ExtResource( 8 )]
+
+[node name="AbilitySelect" parent="CanvasLayer/UI/HUD" instance=ExtResource( 9 )]
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 162, 134 )

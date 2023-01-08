@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scripts/ItemSelect.gd" type="Script" id=1]
+
+[node name="ActionSelect" type="HBoxContainer"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -8.0
+margin_top = -34.0
+margin_right = 8.0
+grow_vertical = 0
+script = ExtResource( 1 )

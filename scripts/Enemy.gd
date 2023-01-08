@@ -9,7 +9,6 @@ export var drop_offset_x = 8
 var max_hp
 var current_hp
 var touch_damage
-var seed_type
 var ability_type
 var ability_cooldown
 var seed_obj
@@ -20,9 +19,7 @@ var dead = false
 var dropped_seed = false
 var player
 
-# Abilities
-var plasma_obj = preload("res://scenes/abilities/Plasma.tscn")
-var shield_obj = preload("res://scenes/abilities/Shield.tscn")
+var ability_obj
 
 onready var sprite = $AnimatedSprite
 onready var collider = $CollisionShape2D
@@ -31,24 +28,21 @@ onready var collider = $CollisionShape2D
 func _ready():
 	randomize()
 	
-	var globals = get_node("/root/Globals")
-	var enemy_data = globals.enemy_data[enemy_type]
+	var enemy_data = get_node("/root/Globals").enemy_data[enemy_type].duplicate(true)
+	
+	seed_obj = load(enemy_data["ability"]["seed"]["object"])
+	ability_obj = load(enemy_data["ability"]["object"])
+	
+	ability_type = enemy_data["ability"]["name"]
+	ability_cooldown = enemy_data["ability"]["cooldown"]
+
 	touch_damage = enemy_data["touch_damage"]
-	seed_type = enemy_data["seed_type"]
-	ability_type = enemy_data["ability_type"]
-	ability_cooldown = enemy_data["ability_cooldown"]
 	max_hp = enemy_data["max_hp"]
 	current_hp = max_hp
-	
-	var seed_data = globals.plant_data[seed_type]
-	seed_obj = load(seed_data["object"])
 
 func _process(delta):
 	if dead:
 		return
-
-	if Input.is_action_just_pressed("debug"):
-		hit(1)
 
 	if stunned:
 		stun_countdown -= delta
@@ -90,7 +84,6 @@ func hit(damage):
 func die():
 	sprite.play("die")
 	dead = true
-	collider.disabled = true
 	call_deferred("drop_seeds")
 
 func drop_seeds():
@@ -102,7 +95,7 @@ func drop_seeds():
 	elif not dropped_seed:
 		num_drops = 1
 		dropped_seed = true
-	for i in range(num_drops):
+	for _i in range(num_drops):
 		# TODO nice drop animation
 		var drop_x = randi() % drop_range - drop_range / 2
 		drop_x += drop_offset_x if drop_x > 0 else -drop_offset_x
@@ -111,6 +104,9 @@ func drop_seeds():
 		get_parent().add_child(seed_instance)
 
 func _on_Enemy_body_entered(body):
+	if dead:
+		return
+
 	if body.name != "Player":
 		return
 	if touch_damage and not stunned:
@@ -131,13 +127,12 @@ func _on_SightRange_body_exited(body):
 
 
 ### ABILITY FUNCTIONS (TODO: refactor this nightmare) ###
-
 func plasma():
-	var plasma = plasma_obj.instance()
+	var plasma = ability_obj.instance()
 	get_parent().add_child(plasma)
 	var direction = 1 if sprite.flip_h else -1
 	plasma.set_start(position, direction)
 
 func shield():
-	var shield = shield_obj.instance()
+	var shield = ability_obj.instance()
 	add_child(shield)

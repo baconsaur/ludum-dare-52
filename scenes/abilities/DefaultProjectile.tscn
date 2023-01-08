@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://scenes/Projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/abilities/Projectile.tscn" type="PackedScene" id=1]
 
 [node name="DefaultProjectile" instance=ExtResource( 1 )]
 damage = 0

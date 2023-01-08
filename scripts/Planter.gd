@@ -8,7 +8,7 @@ onready var plant_sprite = $PlantSprite
 
 
 func _ready():
-	plant_data = get_node("/root/Globals").plant_data
+	plant_data = get_node("/root/Globals").plant_data.duplicate(true)
 
 func has_plant():
 	if seed_type:
