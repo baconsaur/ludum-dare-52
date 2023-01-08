@@ -52,7 +52,7 @@ func enter_greenhouse():
 	player_hp.hide()
 	seed_select.show()
 	call_deferred("add_child", greenhouse)
-	player.spawn(player_spawn, false)
+	call_deferred("spawn_player", greenhouse, false)
 	weapon_select.disable_select()
 	ability_select.disable_select()
 
@@ -69,13 +69,13 @@ func enter_exploration():
 	call_deferred("remove_child", greenhouse)
 	loaded_level = levels[current_level].instance()
 	call_deferred("add_child", loaded_level)
-	call_deferred("spawn_player")
+	call_deferred("spawn_player", loaded_level, true)
 	loaded_level.connect("checkpoint_activated", self, "complete_level")
 	weapon_select.enable_select()
 	ability_select.enable_select()
 
-func spawn_player():
-	player.spawn(loaded_level.spawn.position, true)
+func spawn_player(level, exploring):
+	player.spawn(level.spawn.position, exploring)
 
 func add_seed(seed_type):
 	new_seeds.append(seed_type)

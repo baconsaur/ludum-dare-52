@@ -44,12 +44,12 @@ var ability_data = {
 
 var enemy_data = {
 	"plasma": {
-		"touch_damage": 1,
+		"touch_damage": 3,
 		"ability": ability_data["plasma"],
 		"max_hp": 1,
 	},
 	"shield": {
-		"touch_damage": 1,
+		"touch_damage": 3,
 		"ability": ability_data["shield"],
 		"max_hp": 1,
 	}

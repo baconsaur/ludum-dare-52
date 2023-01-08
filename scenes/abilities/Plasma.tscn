@@ -16,6 +16,7 @@ animations = [ {
 } ]
 
 [node name="Plasma" instance=ExtResource( 1 )]
+damage = 2
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 2 )
