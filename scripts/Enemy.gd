@@ -5,6 +5,10 @@ export var stun_cooldown = 2
 export var drop_range = 30
 export var drop_offset_y = 12
 export var drop_offset_x = 8
+export var projectile_spawn = {
+	1:	Vector2(0, 0),
+	-1: Vector2(0, 0),
+}
 
 var max_hp
 var current_hp

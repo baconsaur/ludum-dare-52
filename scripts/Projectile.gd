@@ -21,7 +21,7 @@ func _process(delta):
 func setup_instance(owner):
 	var direction = -1 if owner.sprite.flip_h else 1
 	move_speed *= direction
-	position = Vector2(owner.position.x + (5 * direction), owner.position.y)
+	position = Vector2(owner.position + owner.projectile_spawn[direction])
 	is_friendly = owner.name == "Player"
 	owner.get_parent().add_child(self)
 

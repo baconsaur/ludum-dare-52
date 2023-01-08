@@ -13,3 +13,9 @@ func _process(delta):
 func setup_instance(owner):
 	is_friendly = owner.name == "Player"
 	owner.add_child(self)
+
+
+func _on_Shield_body_entered(body):
+	var parent = get_parent()
+	if body.name == "Player" and body != parent:
+		body.knockback(-1 if parent.sprite.flip_h else 1)

@@ -13,6 +13,10 @@ export var move_speed = 100
 export var jump_power = 400
 export var fall_gravity_modifier = 2
 export var knockback_distance = 30
+export var projectile_spawn = {
+	1:	Vector2(10, 3),
+	-1: Vector2(-11, 3),
+}
 
 var gravity = 981
 var falling = false
@@ -25,11 +29,13 @@ var current_ability
 var current_weapon
 var attack_countdown = 0
 var ability_countdown = 0
+var last_animation = "idle"
 
 onready var sprite = $Sprite
 
 func _ready():
 	ability_data = get_node("/root/Globals").ability_data.duplicate(true)
+	sprite.connect("animation_finished", self, "on_animation_finished")
 
 func _physics_process(delta):
 	process_exploring_actions(delta)
@@ -85,12 +91,17 @@ func process_shared_actions(delta):
 		falling = false
 
 	if velocity.y > 0 and not is_on_floor():
-		sprite.play("fall")
+		play_sprite_anim("fall")
 		falling = true
 	elif is_on_floor() and velocity.x != 0:
-		sprite.play("run")
+		play_sprite_anim("run")
 	elif is_on_floor():
-		sprite.play("idle")
+		play_sprite_anim("idle")
+
+func play_sprite_anim(anim_name):
+	# Prevents overriding compound action animations with their base action, ex. shoot_idle won't transition to idle
+	if not anim_name in sprite.animation or not sprite.is_playing():
+		sprite.play(anim_name)
 
 func pickup(seed_name):
 	emit_signal("add_seed", seed_name)
@@ -136,6 +147,11 @@ func set_active_ability(ability_name):
 		current_ability = null
 
 func fire():
+	var current_animation = sprite.animation
+	if not current_animation in ["idle", "run", "jump", "fall"]:
+		current_animation = "idle"
+	sprite.play("shoot_" + current_animation)
+	
 	var projectile = current_weapon["loaded_object"].instance()
 	projectile.setup_instance(self)
 	attack_countdown = current_weapon["cooldown"]
@@ -144,6 +160,7 @@ func fire():
 func use_ability():
 	if not current_ability:
 		return
+	sprite.play("use_item_idle")
 	var ability = current_ability["loaded_object"].instance()
 	ability.setup_instance(self)
 	ability_countdown = current_ability["cooldown"]
@@ -155,5 +172,15 @@ func interact():
 			var item = focused_planter.harvest()
 			if item:
 				emit_signal("harvest_item", item)
+				sprite.play("use_item_idle")
 		else:
 			emit_signal("plant_seed", focused_planter)
+
+func plant_seed():
+	sprite.play("use_item_idle")
+
+func on_animation_finished():
+	if "shoot" in sprite.animation:
+		sprite.play(sprite.animation.replace("shoot_", ""))
+	elif "use_item" in sprite.animation:
+		sprite.play(sprite.animation.replace("use_item_", ""))

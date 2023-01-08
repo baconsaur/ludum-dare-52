@@ -93,6 +93,7 @@ func plant_seed(planter):
 	var current_seed = seed_select.pop_current_seed()
 	if current_seed:
 		planter.plant(current_seed)
+		player.plant_seed()
 
 func handle_hp_change(value):
 	player_hp.update_value(value)

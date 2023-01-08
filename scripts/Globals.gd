@@ -38,7 +38,7 @@ var ability_data = {
 		"name": "shield",
 		"icon": "res://scenes/ui/ShieldAbilityInfo.tscn",
 		"object": "res://scenes/abilities/Shield.tscn",
-		"cooldown": 3,
+		"cooldown": 3.5,
 	}
 }
 
