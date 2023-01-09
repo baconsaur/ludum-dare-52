@@ -12,6 +12,7 @@ var weapon_inventory = []
 var ability_inventory = []
 var active_tutorials = []
 var seen_ability_tutorial = false
+var seen_items = []
 
 onready var ui = $CanvasLayer/UI
 onready var hud = $CanvasLayer/UI/HUD
@@ -22,6 +23,7 @@ onready var weapon_select = $CanvasLayer/UI/HUD/WeaponSelect
 onready var player = $Player
 onready var greenhouse = $Greenhouse
 onready var change_item_sound = $ChangeItem
+onready var info_modal_obj = preload("res://scenes/ui/InfoModal.tscn")
 
 func _ready():
 	player.connect("add_seed", self, "add_seed")
@@ -43,10 +45,6 @@ func _ready():
 	ability_select.connect("select_item", player, "set_active_ability")
 
 func _process(_delta):
-	if Input.is_action_just_pressed("debug"):
-		var item = ability_data["bomb"]
-		ability_select.add(item)
-		
 	if Input.is_action_just_pressed("select_left"):
 		if loaded_level:
 			ability_select.select_next()
@@ -79,6 +77,11 @@ func complete_level():
 	step_plant_growth = true
 	clear_tutorials()
 	enter_greenhouse()
+	if current_level == levels.size():
+		greenhouse.checkpoint.queue_free()
+		var modal = info_modal_obj.instance()
+		ui.add_child(modal)
+		modal.set_up("You Win!", "You finished all the levels I had time for. Congrats, and thanks for playing!")
 
 func enter_exploration():
 	player_hp.show()
@@ -99,6 +102,8 @@ func enter_exploration():
 
 func spawn_player(level, exploring):
 	player.spawn(level.spawn.position, exploring)
+	if current_level == 0:
+		see_item("default")
 
 func add_seed(seed_type):
 	new_seeds.append(seed_type)
@@ -124,6 +129,8 @@ func handle_death():
 	enter_greenhouse()
 
 func handle_harvest_item(item_name):
+	see_item(item_name)
+	
 	var item = ability_data[item_name]
 	if item["type"] == "weapon":
 		weapon_select.add(item)
@@ -156,6 +163,19 @@ func clear_tutorials():
 		if is_instance_valid(tutorial):
 			tutorial.queue_free()
 	active_tutorials.clear()
+
+func see_item(item_name):
+	if item_name in seen_items:
+		return
+	seen_items.append(item_name)
+	var modal = info_modal_obj.instance()
+	ui.add_child(modal)
+	var pretty_name = item_name.capitalize()
+	if item_name == "default":
+		pretty_name = "Energy Ball"
+	elif item_name == "plasma":
+		pretty_name = "Plasma Burst"
+	modal.set_up(pretty_name, ability_data[item_name]["hint"])
 
 func _on_Greenhouse_checkpoint_activated():
 	clear_tutorials()

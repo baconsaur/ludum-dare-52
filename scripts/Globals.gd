@@ -29,6 +29,7 @@ var ability_data = {
 		"icon": "res://scenes/ui/DefaultWeaponInfo.tscn",
 		"object": "res://scenes/abilities/DefaultProjectile.tscn",
 		"player_cooldown": 0.4,
+		"hint": "An unlimited source of ammo for your gun. Stun enemies to sneak by and collect their seeds.",
 	},
 	"plasma": {
 		"seed": plant_data["plasma"],
@@ -38,6 +39,7 @@ var ability_data = {
 		"object": "res://scenes/abilities/Plasma.tscn",
 		"player_cooldown": 0.7,
 		"enemy_cooldown": 2,
+		"hint": "More powerful ammo for your gun. Deal lethal damage to harvest more seeds.",
 	},
 	"shield": {
 		"seed": plant_data["shield"],
@@ -47,6 +49,7 @@ var ability_data = {
 		"object": "res://scenes/abilities/Shield.tscn",
 		"player_cooldown": 2.75,
 		"enemy_cooldown": 3.75,
+		"hint": "A personal shield. Gain temporary immunity to energy weapons",
 	},
 	"bomb": {
 		"seed": plant_data["bomb"],
@@ -55,7 +58,8 @@ var ability_data = {
 		"icon": "res://scenes/ui/BombWeaponInfo.tscn",
 		"object": "res://scenes/abilities/Bomb.tscn",
 		"player_cooldown": 1.5,
-		"enemy_cooldown": 3,
+		"enemy_cooldown": 2,
+		"hint": "An explosive device that can penetrate shields and deal massive damage within the blast radius.",
 	}
 }
 

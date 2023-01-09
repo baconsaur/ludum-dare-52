@@ -2,8 +2,8 @@ extends "res://scripts/Projectile.gd"
 
 export var fall_speed = 100
 export var bomb_offset = Vector2(0, -2)
-export var fall_acceleration = 1.5
-export var terminal_speed = 170
+export var fall_acceleration = 1.7
+export var terminal_speed = 260
 
 var bomb_sprite
 var is_ready = false
@@ -34,9 +34,10 @@ func setup_instance(owner):
 		position = owner.position - bomb_offset
 	else:
 		actual_setup()
-		move_speed *= owner.look_direction
+		var look_direction = owner.get_look_direction()
+		move_speed *= look_direction
 		fall_speed = 1
-		position = Vector2(owner.position + owner.projectile_spawn[owner.look_direction])
+		position = Vector2(owner.position + owner.projectile_spawn[look_direction])
 
 func actual_setup():
 	show()

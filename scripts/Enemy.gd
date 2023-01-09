@@ -3,7 +3,6 @@ extends Area2D
 export var enemy_type = "plasma"
 export var stun_cooldown = 2
 export var drop_range = 30
-export var drop_offset_y = 12
 export var drop_offset_x = 8
 export var projectile_spawn = {
 	1:	Vector2(0, 0),
@@ -46,6 +45,7 @@ func _ready():
 	
 	ability_type = enemy_data["ability"]["name"]
 	ability_cooldown = enemy_data["ability"]["enemy_cooldown"]
+	ability_countdown = 0.3 # Just a little breathing room to start
 
 	touch_damage = enemy_data["touch_damage"]
 	max_drops = enemy_data["max_drops"]
@@ -90,6 +90,9 @@ func _process(delta):
 		var ability = ability_obj.instance()
 		ability.setup_instance(self)
 		ability_countdown = ability_cooldown
+
+func get_look_direction():
+	return look_direction
 
 func stun():
 	if dead or stunned:
@@ -136,7 +139,7 @@ func drop_seeds():
 		var drop_x = randi() % drop_range - drop_range / 2
 		drop_x += drop_offset_x if drop_x > 0 else -drop_offset_x
 		var seed_instance = seed_obj.instance()
-		seed_instance.position = Vector2(position.x + drop_x, position.y + drop_offset_y)
+		seed_instance.position = Vector2(position.x + drop_x, position.y)
 		get_parent().add_child(seed_instance)
 
 func transition_animation(last, next):

@@ -95,13 +95,13 @@ position = Vector2( 336, 176 )
 position = Vector2( -16, 176 )
 
 [node name="TutorialTrigger" parent="." instance=ExtResource( 5 )]
-position = Vector2( 56, 192 )
+position = Vector2( 40, 192 )
 scale = Vector2( 1, 0.4 )
 monitoring = false
 tutorial_name = "PlantTutorial"
 
 [node name="TutorialTrigger2" parent="." instance=ExtResource( 5 )]
-position = Vector2( 56, 192 )
+position = Vector2( 40, 192 )
 scale = Vector2( 1, 0.4 )
 monitoring = false
 tutorial_name = "HarvestTutorial"

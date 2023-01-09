@@ -28,5 +28,5 @@ tile_data = PoolIntArray( -524271, 0, 8, -524270, 0, 10, -524269, 0, 10, -524268
 [node name="Spawn" parent="." instance=ExtResource( 1 )]
 
 [node name="TutorialTrigger" parent="." instance=ExtResource( 5 )]
-position = Vector2( 352, 152 )
+position = Vector2( 312, 152 )
 tutorial_name = "ShootTutorial"

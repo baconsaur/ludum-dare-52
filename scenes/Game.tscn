@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/UI.gd" type="Script" id=2]
@@ -22,10 +22,13 @@
 [ext_resource path="res://scenes/ui/tutorials/AbilityTutorial.tscn" type="PackedScene" id=20]
 [ext_resource path="res://scripts/Tutorial.gd" type="Script" id=21]
 [ext_resource path="res://scenes/ui/tutorials/HarvestTutorial.tscn" type="PackedScene" id=22]
+[ext_resource path="res://scenes/levels/Level5.tscn" type="PackedScene" id=23]
+[ext_resource path="res://scenes/levels/Level6.tscn" type="PackedScene" id=24]
+[ext_resource path="res://scenes/levels/Level7.tscn" type="PackedScene" id=25]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
-levels = [ ExtResource( 4 ), ExtResource( 11 ), ExtResource( 13 ), ExtResource( 12 ) ]
+levels = [ ExtResource( 4 ), ExtResource( 11 ), ExtResource( 13 ), ExtResource( 12 ), ExtResource( 23 ), ExtResource( 24 ), ExtResource( 25 ) ]
 player_spawn = Vector2( 0, 176 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

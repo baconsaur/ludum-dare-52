@@ -16,6 +16,9 @@ position = Vector2( 800, 176 )
 [node name="PlasmaEnemy" parent="." instance=ExtResource( 6 )]
 position = Vector2( 496, 272 )
 
+[node name="PlasmaEnemy2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 688, 272 )
+
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 32, 32 )

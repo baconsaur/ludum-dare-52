@@ -33,7 +33,6 @@ var current_weapon
 var attack_countdown = 0
 var ability_countdown = 0
 var last_animation = "idle"
-var look_direction = 1
 var dead = false
 var stunned = false
 var spawn_countdown = spawn_cooldown
@@ -101,10 +100,8 @@ func process_shared_actions(delta):
 			velocity.x = direction * move_speed
 			if direction < 0:
 				sprite.set_flip_h(true)
-				look_direction = -1
 			else:
 				sprite.set_flip_h(false)
-				look_direction = 1
 			emit_signal("movement")
 		else:
 			velocity.x = move_toward(velocity.x, 0, move_speed)
@@ -123,6 +120,11 @@ func process_shared_actions(delta):
 		play_sprite_anim("run")
 	elif is_on_floor():
 		play_sprite_anim("idle")
+
+func get_look_direction():
+	if sprite.flip_h:
+		return -1
+	return 1
 
 func play_sprite_anim(anim_name):
 	# Prevents overriding compound action animations with their base action, ex. shoot_idle won't transition to idle

@@ -7,7 +7,7 @@
 extents = Vector2( 13, 12.5 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 21, 71.5 )
+extents = Vector2( 47, 128.5 )
 
 [node name="BombEnemy" instance=ExtResource( 1 )]
 enemy_type = "bomb"
@@ -23,5 +23,5 @@ position = Vector2( 0, -2.5 )
 shape = SubResource( 1 )
 
 [node name="CollisionShape2D" parent="SightRange" index="0"]
-position = Vector2( 0, 55.5 )
+position = Vector2( 0, 112.5 )
 shape = SubResource( 2 )

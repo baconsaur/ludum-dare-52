@@ -3,7 +3,7 @@ extends Area2D
 export var damage = 1
 export var stun = false
 export var move_speed = 350
-export var max_distance = 200
+export var max_distance = 150
 export var piercing = false
 
 var distance_traveled = 0
@@ -18,13 +18,14 @@ func real_process(delta):
 	var frame_distance = delta * move_speed
 	position.x += frame_distance
 	
-	distance_traveled += frame_distance
+	distance_traveled += abs(frame_distance)
 	if distance_traveled > max_distance:
 		destroy()
 
 func setup_instance(owner):
-	move_speed *= owner.look_direction
-	position = Vector2(owner.position + owner.projectile_spawn[owner.look_direction])
+	var look_direction = owner.get_look_direction()
+	move_speed *= look_direction
+	position = Vector2(owner.position + owner.projectile_spawn[look_direction])
 	is_friendly = owner.name == "Player"
 	owner.get_parent().add_child(self)
 
@@ -38,7 +39,7 @@ func _on_Projectile_body_entered(body):
 		destroy()
 	elif not is_friendly:
 		body.hit(damage)
-	destroy()
+		destroy()
 
 
 func _on_Projectile_area_entered(area):
