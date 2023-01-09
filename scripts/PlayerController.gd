@@ -31,6 +31,8 @@ var attack_countdown = 0
 var ability_countdown = 0
 var last_animation = "idle"
 var look_direction = 1
+var dead = false
+var stunned = false
 
 onready var sprite = $Sprite
 
@@ -39,6 +41,8 @@ func _ready():
 	sprite.connect("animation_finished", self, "on_animation_finished")
 
 func _physics_process(delta):
+	if dead or stunned:
+		return
 	process_exploring_actions(delta)
 	process_greenhouse_actions(delta)
 	process_shared_actions(delta)
@@ -110,6 +114,9 @@ func pickup(seed_name):
 	emit_signal("add_seed", seed_name)
 
 func spawn(pos, exploring):
+	dead = false
+	stunned = false
+	sprite.play("idle")
 	current_hp = max_hp
 	emit_signal("hp_change", current_hp)
 	position = pos
@@ -118,16 +125,21 @@ func spawn(pos, exploring):
 	is_exploring = exploring
 
 func hit(damage):
-	if damage <= 0:
+	if stunned or damage <= 0:
 		return
 
 	current_hp -= damage
 	emit_signal("hp_change", current_hp)
 	if current_hp <= 0:
-		emit_signal("die")
+		dead = true
+		play_sprite_anim("die")
+	else:
+		stunned = true
+		play_sprite_anim("hit")
 
 func knockback(direction):
-	# TODO make this smoother
+	stunned = true
+	play_sprite_anim("hit")
 	position.x += knockback_distance * direction
 
 func set_planter(planter):
@@ -183,7 +195,13 @@ func plant_seed():
 	sprite.play("use_item_idle")
 
 func on_animation_finished():
-	if "shoot" in sprite.animation:
+	if sprite.animation == "die":
+		emit_signal("die")
+	elif sprite.animation == "hit":
+		stunned = false
+	elif "shoot" in sprite.animation:
 		sprite.play(sprite.animation.replace("shoot_", ""))
 	elif "use_item" in sprite.animation:
 		sprite.play(sprite.animation.replace("use_item_", ""))
+	else:
+		sprite.play("idle")

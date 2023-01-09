@@ -23,7 +23,8 @@ var dead = false
 var dropped_seed = false
 var player = null
 var look_direction = -1
-var spawn_cooldown = 1
+var spawn_cooldown = 0.5
+var ready = false
 
 var ability_obj
 
@@ -62,7 +63,7 @@ func _process(delta):
 			sprite.connect("animation_finished", self, "transition_animation", ["recover", "idle"], CONNECT_ONESHOT)
 		return
 	
-	if spawn_cooldown >= 0:
+	if not ready and spawn_cooldown >= 0:
 		# Hacky bug fix I just don't have time to figure this one out
 		spawn_cooldown -= delta
 		return
@@ -143,23 +144,16 @@ func _on_Enemy_body_entered(body):
 		return
 	if touch_damage and not stunned:
 		body.hit(touch_damage)
-		var direction = -1 if sprite.flip_h else 1
-		body.knockback(direction)
+		body.knockback(look_direction)
 
 
 func _on_SightRange_body_entered(body):
-	if spawn_cooldown >= 0:
-		return
-
 	if body.name != "Player":
 		return
 	player = body
 
 
 func _on_SightRange_body_exited(body):
-	if spawn_cooldown >= 0:
-		return
-
 	if body.name != "Player":
 		return
 	player = null
