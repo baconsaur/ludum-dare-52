@@ -18,4 +18,4 @@ func setup_instance(owner):
 func _on_Shield_body_entered(body):
 	var parent = get_parent()
 	if body.name == "Player" and body != parent:
-		body.knockback(-1 if parent.sprite.flip_h else 1)
+		body.knockback(parent.look_direction)
