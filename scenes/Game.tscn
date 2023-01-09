@@ -87,6 +87,7 @@ visible = false
 [node name="Greenhouse" parent="." instance=ExtResource( 5 )]
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
 stream = ExtResource( 14 )
 autoplay = true
 bus = "Music"

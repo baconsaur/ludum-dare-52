@@ -12,13 +12,14 @@ signal trigger_tutorial
 
 export var max_hp = 10
 export var move_speed = 100
-export var jump_power = 400
+export var jump_power = 375
 export var fall_gravity_modifier = 2
 export var knockback_distance = 30
 export var projectile_spawn = {
 	1:	Vector2(10, 3),
 	-1: Vector2(-11, 3),
 }
+export var spawn_cooldown = 0.15
 
 var gravity = 981
 var falling = false
@@ -35,6 +36,7 @@ var last_animation = "idle"
 var look_direction = 1
 var dead = false
 var stunned = false
+var spawn_countdown = spawn_cooldown
 
 onready var sprite = $Sprite
 onready var jump_sound = $Jump
@@ -79,12 +81,6 @@ func process_exploring_actions(delta):
 		use_ability()
 
 func process_shared_actions(delta):
-	if Input.is_action_just_pressed("up") and is_on_floor():
-		sprite.play("jump")
-		jump_sound.play()
-		velocity.y = -jump_power
-		emit_signal("movement")
-	
 	var effective_gravity = gravity if not falling else gravity * fall_gravity_modifier
 	if velocity.y > 0:
 		effective_gravity += gravity * fall_gravity_modifier
@@ -92,19 +88,28 @@ func process_shared_actions(delta):
 		effective_gravity += gravity
 
 	velocity.y += effective_gravity * delta
+	
+	if spawn_countdown <= 0:
+		if Input.is_action_just_pressed("up") and is_on_floor():
+			sprite.play("jump")
+			jump_sound.play()
+			velocity.y = -jump_power
+			emit_signal("movement")
 
-	var direction = Input.get_axis("left", "right")
-	if direction:
-		velocity.x = direction * move_speed
-		if direction < 0:
-			sprite.set_flip_h(true)
-			look_direction = -1
+		var direction = Input.get_axis("left", "right")
+		if direction:
+			velocity.x = direction * move_speed
+			if direction < 0:
+				sprite.set_flip_h(true)
+				look_direction = -1
+			else:
+				sprite.set_flip_h(false)
+				look_direction = 1
+			emit_signal("movement")
 		else:
-			sprite.set_flip_h(false)
-			look_direction = 1
-		emit_signal("movement")
+			velocity.x = move_toward(velocity.x, 0, move_speed)
 	else:
-		velocity.x = move_toward(velocity.x, 0, move_speed)
+		spawn_countdown -= delta
 
 	velocity = move_and_slide(velocity, Vector2.UP)
 	
@@ -129,6 +134,8 @@ func pickup(seed_name):
 	emit_signal("add_seed", seed_name)
 
 func spawn(pos, exploring):
+	spawn_countdown = spawn_cooldown
+	velocity = Vector2.ZERO
 	dead = false
 	stunned = false
 	sprite.play("idle")
