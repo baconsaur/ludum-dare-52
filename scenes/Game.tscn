@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/UI.gd" type="Script" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://scenes/levels/Level2.tscn" type="PackedScene" id=11]
 [ext_resource path="res://scenes/levels/Level4.tscn" type="PackedScene" id=12]
 [ext_resource path="res://scenes/levels/Level3.tscn" type="PackedScene" id=13]
+[ext_resource path="res://sound/explore_bgm.mp3" type="AudioStream" id=14]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
@@ -56,6 +57,11 @@ position = Vector2( -16, 176 )
 current = true
 
 [node name="Greenhouse" parent="." instance=ExtResource( 5 )]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+autoplay = true
+bus = "Music"
 
 [connection signal="checkpoint_activated" from="Greenhouse" to="." method="_on_Greenhouse_checkpoint_activated"]
 [connection signal="child_entered_tree" from="Greenhouse" to="." method="_on_Greenhouse_child_entered_tree"]
