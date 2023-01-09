@@ -21,3 +21,6 @@ max_distance = 130
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 2 )
+
+[node name="Shoot" parent="." index="2"]
+bus = "Sound"

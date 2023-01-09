@@ -31,6 +31,7 @@ shape = SubResource( 3 )
 [node name="Shoot" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 3 )
 autoplay = true
+bus = "Sound"
 
 [connection signal="area_entered" from="." to="." method="_on_Projectile_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Projectile_body_entered"]

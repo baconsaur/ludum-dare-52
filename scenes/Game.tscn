@@ -97,6 +97,7 @@ bus = "Music"
 
 [node name="ChangeItem" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 15 )
+bus = "Sound"
 
 [connection signal="checkpoint_activated" from="Greenhouse" to="." method="_on_Greenhouse_checkpoint_activated"]
 [connection signal="child_entered_tree" from="Greenhouse" to="." method="_on_Greenhouse_child_entered_tree"]

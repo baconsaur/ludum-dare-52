@@ -13,10 +13,14 @@ theme = ExtResource( 4 )
 script = ExtResource( 3 )
 
 [node name="Menu" parent="." instance=ExtResource( 1 )]
+margin_left = 8.0
+margin_top = -9.0
+margin_right = 8.0
+margin_bottom = -9.0
 
 [node name="Title" parent="Menu/NinePatchRect/MarginContainer/ContentContainer" index="0"]
 grow_horizontal = 2
-text = "Ludum Dare 52"
+text = "Seed Scatter"
 
 [node name="StartButton" parent="Menu/NinePatchRect/MarginContainer/ContentContainer/ButtonContainer" index="0" instance=ExtResource( 2 )]
 margin_top = 11.0
