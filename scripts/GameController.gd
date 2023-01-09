@@ -44,7 +44,7 @@ func _ready():
 
 func _process(_delta):
 	if Input.is_action_just_pressed("debug"):
-		var item = ability_data["shield"]
+		var item = ability_data["bomb"]
 		ability_select.add(item)
 		
 	if Input.is_action_just_pressed("select_left"):
@@ -113,6 +113,7 @@ func handle_hp_change(value):
 	player_hp.update_value(value)
 
 func handle_death():
+	clear_tutorials()
 	# TODO fade to black or something
 	if loaded_level:
 		loaded_level.queue_free()

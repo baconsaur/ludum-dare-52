@@ -25,6 +25,7 @@ var player = null
 var look_direction = -1
 var spawn_cooldown = 0.5
 var ready = false
+var max_drops = 1
 
 var ability_obj
 
@@ -47,6 +48,7 @@ func _ready():
 	ability_cooldown = enemy_data["ability"]["cooldown"]
 
 	touch_damage = enemy_data["touch_damage"]
+	max_drops = enemy_data["max_drops"]
 	max_hp = enemy_data["max_hp"]
 	current_hp = max_hp
 	
@@ -121,13 +123,13 @@ func die():
 	call_deferred("drop_seeds")
 
 func drop_seeds():
-	# Drop a max of one seed before death
+	# Drop a max of one seed without killing
 	var num_drops = 0
 	if dead:
-		# Drop 1-2 on death
-		num_drops = randi() % 2 + 1
+		num_drops = (randi() % max_drops) + 1
 	elif not dropped_seed:
 		num_drops = 1
+		max_drops -= 1
 		dropped_seed = true
 	for _i in range(num_drops):
 		# TODO nice drop animation

@@ -13,6 +13,12 @@ var plant_data = {
 		"icon": "res://sprites/shield_seed.png",
 		"object": "res://scenes/seeds/ShieldSeed.tscn",
 	},
+	"bomb": {
+		"growth_time": 1,
+		"animation_frames": "res://sprites/plant_animations/bomb_seed.tres",
+		"icon": "res://sprites/bomb_seed.png",
+		"object": "res://scenes/seeds/BombSeed.tscn",
+	},
 }
 
 var ability_data = {
@@ -22,7 +28,7 @@ var ability_data = {
 		"name": "default",
 		"icon": "res://scenes/ui/DefaultWeaponInfo.tscn",
 		"object": "res://scenes/abilities/DefaultProjectile.tscn",
-		"cooldown": 0.5,
+		"cooldown": 0.4,
 	},
 	"plasma": {
 		"seed": plant_data["plasma"],
@@ -30,7 +36,7 @@ var ability_data = {
 		"name": "plasma",
 		"icon": "res://scenes/ui/PlasmaWeaponInfo.tscn",
 		"object": "res://scenes/abilities/Plasma.tscn",
-		"cooldown": 2,
+		"cooldown": 0.7,
 	},
 	"shield": {
 		"seed": plant_data["shield"],
@@ -39,6 +45,14 @@ var ability_data = {
 		"icon": "res://scenes/ui/ShieldAbilityInfo.tscn",
 		"object": "res://scenes/abilities/Shield.tscn",
 		"cooldown": 3.5,
+	},
+	"bomb": {
+		"seed": plant_data["bomb"],
+		"type": "ability",
+		"name": "bomb",
+		"icon": "res://scenes/ui/BombWeaponInfo.tscn",
+		"object": "res://scenes/abilities/Bomb.tscn",
+		"cooldown": 1.2,
 	}
 }
 
@@ -47,10 +61,18 @@ var enemy_data = {
 		"touch_damage": 3,
 		"ability": ability_data["plasma"],
 		"max_hp": 1,
+		"max_drops": 4,
 	},
 	"shield": {
 		"touch_damage": 3,
 		"ability": ability_data["shield"],
 		"max_hp": 1,
+		"max_drops": 3,
+	},
+	"bomb": {
+		"touch_damage": 2,
+		"ability": ability_data["bomb"],
+		"max_hp": 1,
+		"max_drops": 2,
 	}
 }

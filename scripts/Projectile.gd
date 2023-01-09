@@ -11,6 +11,10 @@ var is_friendly = false
 
 
 func _process(delta):
+	# Hand off processing to a function I can override 
+	real_process(delta)
+
+func real_process(delta):
 	var frame_distance = delta * move_speed
 	position.x += frame_distance
 	
@@ -34,7 +38,7 @@ func _on_Projectile_body_entered(body):
 		destroy()
 	elif not is_friendly:
 		body.hit(damage)
-		destroy()
+	destroy()
 
 
 func _on_Projectile_area_entered(area):
