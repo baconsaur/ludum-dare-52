@@ -64,3 +64,8 @@ tutorial_name = "HarvestTutorial"
 
 [node name="Arrow" parent="TutorialTrigger2" instance=ExtResource( 6 )]
 position = Vector2( 272, 0 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+z_index = -10
+color = Color( 0.384314, 0.333333, 0.396078, 1 )
+polygon = PoolVector2Array( -40, 56, -40, 200, 360, 200, 360, 48 )
