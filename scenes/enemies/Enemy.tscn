@@ -1,7 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://sprites/enemy_animations/plasma_enemy.tres" type="SpriteFrames" id=1]
 [ext_resource path="res://scripts/Enemy.gd" type="Script" id=2]
+[ext_resource path="res://sound/die.wav" type="AudioStream" id=3]
+[ext_resource path="res://sound/hit.wav" type="AudioStream" id=4]
+[ext_resource path="res://sound/stun.wav" type="AudioStream" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 7, 15.5 )
@@ -24,6 +27,15 @@ shape = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SightRange"]
 shape = SubResource( 2 )
+
+[node name="Stun" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="Die" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
 
 [connection signal="body_entered" from="." to="." method="_on_Enemy_body_entered"]
 [connection signal="body_entered" from="SightRange" to="." method="_on_SightRange_body_entered"]

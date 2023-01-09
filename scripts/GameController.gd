@@ -10,6 +10,8 @@ var new_seeds = []
 var ability_data
 var weapon_inventory = []
 var ability_inventory = []
+var active_tutorials = []
+var seen_ability_tutorial = false
 
 onready var ui = $CanvasLayer/UI
 onready var hud = $CanvasLayer/UI/HUD
@@ -29,6 +31,8 @@ func _ready():
 	player.connect("harvest_item", self, "handle_harvest_item")
 	player.connect("use_weapon", weapon_select, "remove")
 	player.connect("use_ability", ability_select, "remove")
+	player.connect("movement", self, "handle_player_first_move", [], CONNECT_ONESHOT)
+	player.connect("trigger_tutorial", self, "show_tutorial")
 	
 	seed_select.connect("change_selection", change_item_sound, "play")
 	
@@ -40,8 +44,8 @@ func _ready():
 
 func _process(_delta):
 	if Input.is_action_just_pressed("debug"):
-		var item = ability_data["plasma"]
-		weapon_select.add(item)
+		var item = ability_data["shield"]
+		ability_select.add(item)
 		
 	if Input.is_action_just_pressed("select_left"):
 		if loaded_level:
@@ -65,12 +69,15 @@ func enter_greenhouse():
 	call_deferred("spawn_player", greenhouse, false)
 	weapon_select.disable_select()
 	ability_select.disable_select()
+	if not greenhouse.plant_tutorial_activated and seed_select.seed_container.get_child_count():
+		greenhouse.enable_plant_tutorial()
 
 func complete_level():
 	loaded_level.queue_free()
 	loaded_level = null
 	current_level += 1
 	step_plant_growth = true
+	clear_tutorials()
 	enter_greenhouse()
 
 func enter_exploration():
@@ -81,6 +88,10 @@ func enter_exploration():
 	call_deferred("add_child", loaded_level)
 	call_deferred("spawn_player", loaded_level, true)
 	loaded_level.connect("checkpoint_activated", self, "complete_level")
+	
+	if not seen_ability_tutorial and ability_select.item_container.get_child_count():
+		show_tutorial("AbilityTutorial")
+		seen_ability_tutorial = true
 	
 	for inst in [weapon_select, ability_select]:
 		inst.enable_select()
@@ -118,11 +129,41 @@ func handle_harvest_item(item_name):
 	elif item["type"] == "ability":
 		ability_select.add(item)
 
+func handle_player_first_move():
+	var move_tutorial = player.tutorials.get_node_or_null("MovementTutorial")
+	if move_tutorial and is_instance_valid(move_tutorial):
+		move_tutorial.dismiss()
+
+func show_tutorial(tutorial_name):
+	var tutorial = player.tutorials.get_node_or_null(tutorial_name)
+	if not tutorial:
+		return
+	tutorial.show()
+	active_tutorials.append(tutorial)
+	
+	if tutorial_name == "ShootTutorial":
+		player.connect("use_weapon", tutorial, "dismiss", [], CONNECT_ONESHOT)
+	elif tutorial_name == "PlantTutorial":
+		player.connect("plant_seed", tutorial, "dismiss", [], CONNECT_ONESHOT)
+	elif tutorial_name == "AbilityTutorial":
+		player.connect("use_ability", tutorial, "dismiss", [], CONNECT_ONESHOT)
+	elif tutorial_name == "HarvestTutorial":
+		player.connect("harvest_item", tutorial, "dismiss", [], CONNECT_ONESHOT)
+
+func clear_tutorials():
+	for tutorial in active_tutorials:
+		if is_instance_valid(tutorial):
+			tutorial.queue_free()
+	active_tutorials.clear()
 
 func _on_Greenhouse_checkpoint_activated():
+	clear_tutorials()
 	enter_exploration()
 
 
 func _on_Greenhouse_child_entered_tree(node):
-	if node.is_in_group("planters") and step_plant_growth:
-		node.step()
+	if node.is_in_group("planters"):
+		if step_plant_growth:
+			node.step()
+			if not greenhouse.harvest_tutorial_activated and node.grown:
+				greenhouse.enable_harvest_tutorial()

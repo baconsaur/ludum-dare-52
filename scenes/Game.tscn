@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scripts/GameController.gd" type="Script" id=1]
 [ext_resource path="res://scripts/UI.gd" type="Script" id=2]
@@ -15,11 +15,18 @@
 [ext_resource path="res://scenes/levels/Level3.tscn" type="PackedScene" id=13]
 [ext_resource path="res://sound/explore_bgm.mp3" type="AudioStream" id=14]
 [ext_resource path="res://sound/change_item.wav" type="AudioStream" id=15]
+[ext_resource path="res://scripts/Camera.gd" type="Script" id=16]
+[ext_resource path="res://scenes/ui/MovementTutorial.tscn" type="PackedScene" id=17]
+[ext_resource path="res://scenes/ui/tutorials/ShootTutorial.tscn" type="PackedScene" id=18]
+[ext_resource path="res://scenes/ui/tutorials/PlantTutorial.tscn" type="PackedScene" id=19]
+[ext_resource path="res://scenes/ui/tutorials/AbilityTutorial.tscn" type="PackedScene" id=20]
+[ext_resource path="res://scripts/Tutorial.gd" type="Script" id=21]
+[ext_resource path="res://scenes/ui/tutorials/HarvestTutorial.tscn" type="PackedScene" id=22]
 
 [node name="Game" type="Node2D"]
 script = ExtResource( 1 )
 levels = [ ExtResource( 4 ), ExtResource( 11 ), ExtResource( 13 ), ExtResource( 12 ) ]
-player_spawn = Vector2( 162, 134 )
+player_spawn = Vector2( 0, 176 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -52,10 +59,30 @@ visible = false
 [node name="AbilitySelect" parent="CanvasLayer/UI/HUD" instance=ExtResource( 9 )]
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( -16, 176 )
+position = Vector2( 0, 176 )
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera" type="Camera2D" parent="Player"]
 current = true
+script = ExtResource( 16 )
+
+[node name="Tutorial" type="Node2D" parent="Player"]
+position = Vector2( -32, -32 )
+z_index = 10
+
+[node name="MovementTutorial" parent="Player/Tutorial" instance=ExtResource( 17 )]
+script = ExtResource( 21 )
+
+[node name="AbilityTutorial" parent="Player/Tutorial" instance=ExtResource( 20 )]
+visible = false
+
+[node name="PlantTutorial" parent="Player/Tutorial" instance=ExtResource( 19 )]
+visible = false
+
+[node name="ShootTutorial" parent="Player/Tutorial" instance=ExtResource( 18 )]
+visible = false
+
+[node name="HarvestTutorial" parent="Player/Tutorial" instance=ExtResource( 22 )]
+visible = false
 
 [node name="Greenhouse" parent="." instance=ExtResource( 5 )]
 

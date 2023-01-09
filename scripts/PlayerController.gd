@@ -7,6 +7,8 @@ signal die
 signal harvest_item
 signal use_weapon
 signal use_ability
+signal movement
+signal trigger_tutorial
 
 export var max_hp = 10
 export var move_speed = 100
@@ -42,6 +44,8 @@ onready var spawn_sound = $Spawn
 onready var change_item_sound = $ChangeItem
 onready var pickup_sound = $Pickup
 onready var plant_sound = $Plant
+onready var camera = $Camera
+onready var tutorials = $Tutorial
 
 func _ready():
 	ability_data = get_node("/root/Globals").ability_data.duplicate(true)
@@ -79,6 +83,7 @@ func process_shared_actions(delta):
 		sprite.play("jump")
 		jump_sound.play()
 		velocity.y = -jump_power
+		emit_signal("movement")
 	
 	var effective_gravity = gravity if not falling else gravity * fall_gravity_modifier
 	if velocity.y > 0:
@@ -97,6 +102,7 @@ func process_shared_actions(delta):
 		else:
 			sprite.set_flip_h(false)
 			look_direction = 1
+		emit_signal("movement")
 	else:
 		velocity.x = move_toward(velocity.x, 0, move_speed)
 
@@ -140,6 +146,7 @@ func hit(damage):
 
 	current_hp -= damage
 	emit_signal("hp_change", current_hp)
+	camera.shake()
 	if current_hp <= 0:
 		dead = true
 		play_sprite_anim("die")
@@ -219,3 +226,6 @@ func on_animation_finished():
 		sprite.play(sprite.animation.replace("use_item_", ""))
 	else:
 		sprite.play("idle")
+
+func trigger_tutorial(tutorial_name):
+	emit_signal("trigger_tutorial", tutorial_name)

@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://ui/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://scripts/Tutorial.gd" type="Script" id=2]
+
+[node name="Tutorial" type="Control"]
+margin_right = 65.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+margin_bottom = 11.0
+size_flags_horizontal = 4
+align = 1
+valign = 1
+
+[node name="Explanation" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -38.5
+margin_top = -17.0
+margin_right = 38.5
+margin_bottom = -6.0
+align = 1
+valign = 1

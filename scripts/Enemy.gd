@@ -30,6 +30,9 @@ var ability_obj
 
 onready var sprite = $AnimatedSprite
 onready var collider = $CollisionShape2D
+onready var hit_sound = $Hit
+onready var die_sound = $Die
+onready var stun_sound = $Stun
 
 
 func _ready():
@@ -91,6 +94,7 @@ func stun():
 		return
 
 	sprite.play("stunned")
+	stun_sound.play()
 	call_deferred("drop_seeds")
 	stunned = true
 	stun_countdown = stun_cooldown
@@ -104,6 +108,7 @@ func hit(damage):
 		die()
 	else:
 		sprite.play("hit")
+		hit_sound.play()
 		if sprite.is_connected("animation_finished", self, "transition_animation"):
 				sprite.disconnect("animation_finished", self, "transition_animation")
 		sprite.connect("animation_finished", self, "transition_animation", ["hit", "idle"], CONNECT_ONESHOT)
@@ -111,6 +116,7 @@ func hit(damage):
 
 func die():
 	sprite.play("die")
+	die_sound.play()
 	dead = true
 	call_deferred("drop_seeds")
 

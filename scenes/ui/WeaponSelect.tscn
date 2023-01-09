@@ -8,3 +8,5 @@ anchor_right = 1.0
 margin_left = -16.0
 margin_right = 0.0
 grow_horizontal = 0
+keyboard_control = "E"
+gamepad_control = "R1"

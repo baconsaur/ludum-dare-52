@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/ui/tutorials/BaseTutorial.tscn" type="PackedScene" id=1]
+
+[node name="PlantTutorial" instance=ExtResource( 1 )]
+keyboard_control = "Space"
+gamepad_control = "R2"
+
+[node name="Explanation" parent="." index="1"]
+text = "plant seed"

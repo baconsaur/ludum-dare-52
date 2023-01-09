@@ -3,6 +3,7 @@ extends Area2D
 var seed_type
 var growth_stage = 0
 var plant_data
+var grown = false
 
 onready var plant_sprite = $PlantSprite
 
@@ -27,9 +28,12 @@ func plant(seed_type_name):
 func step():
 	if not seed_type:
 		return
-	if plant_data[seed_type]["growth_time"] > growth_stage:
+	var growth_required = plant_data[seed_type]["growth_time"]
+	if growth_required > growth_stage:
 		growth_stage += 1
 		plant_sprite.play("stage" + str(growth_stage))
+	if growth_stage >= growth_required:
+		grown = true
 
 func harvest():
 	if not seed_type:

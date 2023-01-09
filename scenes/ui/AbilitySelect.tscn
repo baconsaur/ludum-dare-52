@@ -7,3 +7,5 @@ anchor_left = 0.0
 anchor_right = 0.0
 margin_left = 0.0
 margin_right = 16.0
+keyboard_control = "Q"
+gamepad_control = "L1"
