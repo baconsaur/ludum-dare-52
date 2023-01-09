@@ -35,6 +35,13 @@ var dead = false
 var stunned = false
 
 onready var sprite = $Sprite
+onready var jump_sound = $Jump
+onready var hit_sound = $Hit
+onready var die_sound = $Die
+onready var spawn_sound = $Spawn
+onready var change_item_sound = $ChangeItem
+onready var pickup_sound = $Pickup
+onready var plant_sound = $Plant
 
 func _ready():
 	ability_data = get_node("/root/Globals").ability_data.duplicate(true)
@@ -70,6 +77,7 @@ func process_exploring_actions(delta):
 func process_shared_actions(delta):
 	if Input.is_action_just_pressed("up") and is_on_floor():
 		sprite.play("jump")
+		jump_sound.play()
 		velocity.y = -jump_power
 	
 	var effective_gravity = gravity if not falling else gravity * fall_gravity_modifier
@@ -111,12 +119,14 @@ func play_sprite_anim(anim_name):
 		sprite.play(anim_name)
 
 func pickup(seed_name):
+	pickup_sound.play()
 	emit_signal("add_seed", seed_name)
 
 func spawn(pos, exploring):
 	dead = false
 	stunned = false
 	sprite.play("idle")
+	spawn_sound.play()
 	current_hp = max_hp
 	emit_signal("hp_change", current_hp)
 	position = pos
@@ -133,13 +143,13 @@ func hit(damage):
 	if current_hp <= 0:
 		dead = true
 		play_sprite_anim("die")
+		die_sound.play()
 	else:
 		stunned = true
 		play_sprite_anim("hit")
+		hit_sound.play()
 
 func knockback(direction):
-	stunned = true
-	play_sprite_anim("hit")
 	position.x += knockback_distance * direction
 
 func set_planter(planter):
@@ -147,6 +157,8 @@ func set_planter(planter):
 
 func set_active_weapon(weapon_name):
 	if weapon_name:
+		if current_weapon and weapon_name != current_weapon["name"]:
+			change_item_sound.play()
 		current_weapon = ability_data[weapon_name]
 	else:
 		current_weapon = ability_data["default"]
@@ -188,10 +200,12 @@ func interact():
 			if item:
 				emit_signal("harvest_item", item)
 				sprite.play("use_item_idle")
+				pickup_sound.play()
 		else:
 			emit_signal("plant_seed", focused_planter)
 
 func plant_seed():
+	plant_sound.play()
 	sprite.play("use_item_idle")
 
 func on_animation_finished():

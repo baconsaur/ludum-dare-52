@@ -1,7 +1,14 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://sprites/player.png" type="Texture" id=1]
 [ext_resource path="res://scripts/PlayerController.gd" type="Script" id=2]
+[ext_resource path="res://sound/jump.wav" type="AudioStream" id=3]
+[ext_resource path="res://sound/hit.wav" type="AudioStream" id=5]
+[ext_resource path="res://sound/die.wav" type="AudioStream" id=6]
+[ext_resource path="res://sound/return.wav" type="AudioStream" id=7]
+[ext_resource path="res://sound/change_item.wav" type="AudioStream" id=8]
+[ext_resource path="res://sound/pickup.wav" type="AudioStream" id=9]
+[ext_resource path="res://sound/plant.wav" type="AudioStream" id=10]
 
 [sub_resource type="AtlasTexture" id=37]
 atlas = ExtResource( 1 )
@@ -224,3 +231,24 @@ animation = "hit"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, 5 )
 shape = SubResource( 2 )
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="Die" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+
+[node name="Spawn" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+
+[node name="ChangeItem" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+
+[node name="Pickup" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+
+[node name="Plant" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )

@@ -19,6 +19,7 @@ onready var ability_select = $CanvasLayer/UI/HUD/AbilitySelect
 onready var weapon_select = $CanvasLayer/UI/HUD/WeaponSelect
 onready var player = $Player
 onready var greenhouse = $Greenhouse
+onready var change_item_sound = $ChangeItem
 
 func _ready():
 	player.connect("add_seed", self, "add_seed")
@@ -28,6 +29,8 @@ func _ready():
 	player.connect("harvest_item", self, "handle_harvest_item")
 	player.connect("use_weapon", weapon_select, "remove")
 	player.connect("use_ability", ability_select, "remove")
+	
+	seed_select.connect("change_selection", change_item_sound, "play")
 	
 	ability_data = get_node("/root/Globals").ability_data.duplicate(true)
 	weapon_select.add(ability_data["default"], -1)

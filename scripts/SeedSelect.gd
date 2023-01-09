@@ -1,5 +1,7 @@
 extends Control
 
+signal change_selection
+
 var plant_data
 var selected_seed = 0
 
@@ -28,13 +30,16 @@ func select_seed(index):
 	if not children:
 		selected_seed = 0
 		return
+	var last_seed = selected_seed
 	selected_seed = clamp(index, 0, children.size() - 1)
-
+	
 	for i in range(children.size()):
 		if i == selected_seed:
 			children[i].select()
 		else:
 			children[i].deselect()
+	if last_seed != selected_seed:
+		emit_signal("change_selection")
 
 func select_left():
 	select_seed(selected_seed - 1)
