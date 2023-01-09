@@ -43,7 +43,7 @@ func _on_Projectile_body_entered(body):
 
 func _on_Projectile_area_entered(area):
 	if is_friendly and area.is_in_group("enemies"):
-		if area.dead:
+		if area.dead or area.stunned:
 			return
 		if stun:
 			area.stun()

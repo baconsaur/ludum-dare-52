@@ -195,7 +195,7 @@ func fire():
 	
 	var projectile = current_weapon["loaded_object"].instance()
 	projectile.setup_instance(self)
-	attack_countdown = current_weapon["cooldown"]
+	attack_countdown = current_weapon["player_cooldown"]
 	emit_signal("use_weapon", current_weapon["name"])
 
 func use_ability():
@@ -204,7 +204,7 @@ func use_ability():
 	sprite.play("use_item_idle")
 	var ability = current_ability["loaded_object"].instance()
 	ability.setup_instance(self)
-	ability_countdown = current_ability["cooldown"]
+	ability_countdown = current_ability["player_cooldown"]
 	emit_signal("use_ability", current_ability["name"])
 
 func interact():

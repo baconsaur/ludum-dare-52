@@ -45,7 +45,7 @@ func _ready():
 	ability_obj = load(enemy_data["ability"]["object"])
 	
 	ability_type = enemy_data["ability"]["name"]
-	ability_cooldown = enemy_data["ability"]["cooldown"]
+	ability_cooldown = enemy_data["ability"]["enemy_cooldown"]
 
 	touch_damage = enemy_data["touch_damage"]
 	max_drops = enemy_data["max_drops"]

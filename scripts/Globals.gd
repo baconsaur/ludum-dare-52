@@ -28,7 +28,7 @@ var ability_data = {
 		"name": "default",
 		"icon": "res://scenes/ui/DefaultWeaponInfo.tscn",
 		"object": "res://scenes/abilities/DefaultProjectile.tscn",
-		"cooldown": 0.4,
+		"player_cooldown": 0.4,
 	},
 	"plasma": {
 		"seed": plant_data["plasma"],
@@ -36,7 +36,8 @@ var ability_data = {
 		"name": "plasma",
 		"icon": "res://scenes/ui/PlasmaWeaponInfo.tscn",
 		"object": "res://scenes/abilities/Plasma.tscn",
-		"cooldown": 0.7,
+		"player_cooldown": 0.7,
+		"enemy_cooldown": 2,
 	},
 	"shield": {
 		"seed": plant_data["shield"],
@@ -44,7 +45,8 @@ var ability_data = {
 		"name": "shield",
 		"icon": "res://scenes/ui/ShieldAbilityInfo.tscn",
 		"object": "res://scenes/abilities/Shield.tscn",
-		"cooldown": 3.5,
+		"player_cooldown": 2.75,
+		"enemy_cooldown": 3.75,
 	},
 	"bomb": {
 		"seed": plant_data["bomb"],
@@ -52,7 +54,8 @@ var ability_data = {
 		"name": "bomb",
 		"icon": "res://scenes/ui/BombWeaponInfo.tscn",
 		"object": "res://scenes/abilities/Bomb.tscn",
-		"cooldown": 1.2,
+		"player_cooldown": 1.5,
+		"enemy_cooldown": 3,
 	}
 }
 
