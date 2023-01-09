@@ -20,7 +20,7 @@ margin_bottom = -9.0
 
 [node name="Title" parent="Menu/NinePatchRect/MarginContainer/ContentContainer" index="0"]
 grow_horizontal = 2
-text = "Seed Scatter"
+text = "Scattered Seeds"
 
 [node name="StartButton" parent="Menu/NinePatchRect/MarginContainer/ContentContainer/ButtonContainer" index="0" instance=ExtResource( 2 )]
 margin_top = 11.0
