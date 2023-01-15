@@ -11,7 +11,7 @@ signal movement
 signal trigger_tutorial
 
 export var max_hp = 10
-export var move_speed = 100
+export var move_speed = 60
 export var jump_power = 375
 export var fall_gravity_modifier = 2
 export var knockback_distance = 30
@@ -20,6 +20,8 @@ export var projectile_spawn = {
 	-1: Vector2(-11, 3),
 }
 export var spawn_cooldown = 0.15
+export var move_threshold = 17
+export var max_velocity = 210
 
 var gravity = 981
 var falling = false
@@ -36,6 +38,7 @@ var last_animation = "idle"
 var dead = false
 var stunned = false
 var spawn_countdown = spawn_cooldown
+var is_grounded = true
 
 onready var sprite = $Sprite
 onready var jump_sound = $Jump
@@ -47,6 +50,8 @@ onready var pickup_sound = $Pickup
 onready var plant_sound = $Plant
 onready var camera = $Camera
 onready var tutorials = $Tutorial
+onready var coyote_collider = $CoyoteCollider
+onready var floor_collider = $FloorCollider
 
 func _ready():
 	ability_data = get_node("/root/Globals").ability_data.duplicate(true)
@@ -89,19 +94,19 @@ func process_shared_actions(delta):
 	velocity.y += effective_gravity * delta
 	
 	if spawn_countdown <= 0:
-		if Input.is_action_just_pressed("up") and is_on_floor():
+		if Input.is_action_just_pressed("up") and (is_on_floor() or is_grounded):
 			sprite.play("jump")
 			jump_sound.play()
 			velocity.y = -jump_power
 			emit_signal("movement")
-
+			falling = false
+			if is_a_parent_of(coyote_collider):
+				remove_child(coyote_collider)
 		var direction = Input.get_axis("left", "right")
 		if direction:
-			velocity.x = direction * move_speed
-			if direction < 0:
-				sprite.set_flip_h(true)
-			else:
-				sprite.set_flip_h(false)
+			var effective_move_speed = move_speed if is_on_floor() else move_speed * 0.7
+			velocity.x = clamp(velocity.x + direction * effective_move_speed, -max_velocity, max_velocity)
+			flip_direction(direction)
 			emit_signal("movement")
 		else:
 			velocity.x = move_toward(velocity.x, 0, move_speed)
@@ -112,11 +117,13 @@ func process_shared_actions(delta):
 	
 	if is_on_floor():
 		falling = false
+		if not is_a_parent_of(coyote_collider):
+			add_child(coyote_collider)
 
 	if velocity.y > 0 and not is_on_floor():
 		play_sprite_anim("fall")
 		falling = true
-	elif is_on_floor() and velocity.x != 0:
+	elif is_on_floor() and (velocity.x > move_threshold or velocity.x < -move_threshold):
 		play_sprite_anim("run")
 	elif is_on_floor():
 		play_sprite_anim("idle")
@@ -238,3 +245,32 @@ func on_animation_finished():
 
 func trigger_tutorial(tutorial_name):
 	emit_signal("trigger_tutorial", tutorial_name)
+
+func flip_direction(direction):
+	if direction < 0 and not sprite.flip_h:
+		velocity.x = 0
+		sprite.set_flip_h(true)
+		coyote_collider.position.x = 8
+	elif direction > 0 and sprite.flip_h:
+		velocity.x = 0
+		sprite.set_flip_h(false)
+		coyote_collider.position.x = -8
+
+func _on_CoyoteCollider_body_entered(body):
+	if body is TileMap:
+		check_collider(coyote_collider)
+
+func _on_CoyoteCollider_body_exited(body):
+	if body is TileMap:
+		check_collider(coyote_collider)
+
+func _on_FloorCollider_body_entered(body):
+	if body is TileMap:
+		check_collider(floor_collider)
+
+func _on_FloorCollider_body_exited(body):
+	if body is TileMap:
+		check_collider(floor_collider)
+
+func check_collider(collider):
+	is_grounded = not collider.get_overlapping_bodies().empty()
