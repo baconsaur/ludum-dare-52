@@ -23,6 +23,7 @@ position = Vector2( 448, 176 )
 position = Vector2( 664, 272 )
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2( 0, -8 )
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 32, 32 )
 show_collision = true
