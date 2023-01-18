@@ -7,14 +7,14 @@ signal die
 signal harvest_item
 signal use_weapon
 signal use_ability
-signal movement
+#signal movement
 signal trigger_tutorial
 
 export var max_hp = 10
-export var move_speed = 60
+export var move_speed = 300
 export var jump_power = 375
 export var fall_gravity_modifier = 2
-export var knockback_distance = 30
+export var knockback_velocity = 250
 export var projectile_spawn = {
 	1:	Vector2(10, 3),
 	-1: Vector2(-11, 3),
@@ -22,6 +22,7 @@ export var projectile_spawn = {
 export var spawn_cooldown = 0.15
 export var move_threshold = 17
 export var max_velocity = 210
+export var invulnerable_cooldown = 0.25
 
 var gravity = 981
 var falling = false
@@ -39,6 +40,8 @@ var dead = false
 var stunned = false
 var spawn_countdown = spawn_cooldown
 var is_grounded = true
+var is_invulnerable = false
+var invulnerable_countdown = 0
 
 onready var sprite = $Sprite
 onready var jump_sound = $Jump
@@ -58,11 +61,18 @@ func _ready():
 	sprite.connect("animation_finished", self, "on_animation_finished")
 
 func _physics_process(delta):
+	process_shared_actions(delta)
+
 	if dead or stunned:
 		return
+
+	if is_invulnerable and invulnerable_countdown > 0:
+		invulnerable_countdown -= delta
+	else:
+		is_invulnerable = false
+		
 	process_exploring_actions(delta)
 	process_greenhouse_actions(delta)
-	process_shared_actions(delta)
 
 func process_greenhouse_actions(delta):
 	if is_exploring:
@@ -93,12 +103,12 @@ func process_shared_actions(delta):
 
 	velocity.y += effective_gravity * delta
 	
-	if spawn_countdown <= 0:
+	if not dead and not stunned and spawn_countdown <= 0:
 		if Input.is_action_just_pressed("up") and (is_on_floor() or is_grounded):
 			sprite.play("jump")
 			jump_sound.play()
 			velocity.y = -jump_power
-			emit_signal("movement")
+#			emit_signal("movement")
 			falling = false
 			if is_a_parent_of(coyote_collider):
 				remove_child(coyote_collider)
@@ -107,10 +117,10 @@ func process_shared_actions(delta):
 			var effective_move_speed = move_speed if is_on_floor() else move_speed * 0.7
 			velocity.x = clamp(velocity.x + direction * effective_move_speed, -max_velocity, max_velocity)
 			flip_direction(direction)
-			emit_signal("movement")
+#			emit_signal("movement")
 		else:
 			velocity.x = move_toward(velocity.x, 0, move_speed)
-	else:
+	elif spawn_countdown > 0:
 		spawn_countdown -= delta
 
 	velocity = move_and_slide(velocity, Vector2.UP)
@@ -134,6 +144,8 @@ func get_look_direction():
 	return 1
 
 func play_sprite_anim(anim_name):
+	if sprite.animation in ["die", "hit"]:
+		return
 	# Prevents overriding compound action animations with their base action, ex. shoot_idle won't transition to idle
 	if not anim_name in sprite.animation or not sprite.is_playing():
 		sprite.play(anim_name)
@@ -155,9 +167,10 @@ func spawn(pos, exploring):
 	attack_countdown = 0
 	ability_countdown = 0
 	is_exploring = exploring
+	is_invulnerable = false
 
 func hit(damage):
-	if stunned or damage <= 0:
+	if stunned or is_invulnerable or damage <= 0:
 		return
 
 	current_hp -= damage
@@ -165,15 +178,25 @@ func hit(damage):
 	camera.shake()
 	if current_hp <= 0:
 		dead = true
-		play_sprite_anim("die")
+		sprite.play("die")
 		die_sound.play()
+		velocity.x = 0
 	else:
 		stunned = true
-		play_sprite_anim("hit")
+		is_invulnerable = true
+		invulnerable_countdown = invulnerable_cooldown
+		flash()
+		sprite.play("hit")
 		hit_sound.play()
 
 func knockback(direction):
-	position.x += knockback_distance * direction
+	if dead:
+		return
+	if not stunned:
+		stunned = true
+		sprite.play("hit")
+	velocity.x = knockback_velocity * direction
+	velocity = move_and_slide(velocity, Vector2.UP)
 
 func set_planter(planter):
 	focused_planter = planter
@@ -236,6 +259,7 @@ func on_animation_finished():
 		emit_signal("die")
 	elif sprite.animation == "hit":
 		stunned = false
+		sprite.play("idle")
 	elif "shoot" in sprite.animation:
 		sprite.play(sprite.animation.replace("shoot_", ""))
 	elif "use_item" in sprite.animation:
@@ -255,6 +279,14 @@ func flip_direction(direction):
 		velocity.x = 0
 		sprite.set_flip_h(false)
 		coyote_collider.position.x = -8
+
+func flash():
+	while(not dead and invulnerable_countdown > 0):
+		sprite.modulate.a = 0
+		yield(get_tree().create_timer(0.05), "timeout")
+		sprite.modulate.a = 1
+		yield(get_tree().create_timer(0.05), "timeout")
+	sprite.modulate.a = 1
 
 func _on_CoyoteCollider_body_entered(body):
 	if body is TileMap:

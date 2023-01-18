@@ -33,7 +33,7 @@ func _ready():
 	player.connect("harvest_item", self, "handle_harvest_item")
 	player.connect("use_weapon", weapon_select, "remove")
 	player.connect("use_ability", ability_select, "remove")
-	player.connect("movement", self, "handle_player_first_move", [], CONNECT_ONESHOT)
+#	player.connect("movement", self, "handle_player_first_move", [], CONNECT_ONESHOT)
 	player.connect("trigger_tutorial", self, "show_tutorial")
 	
 	seed_select.connect("change_selection", change_item_sound, "play")
@@ -136,11 +136,12 @@ func handle_harvest_item(item_name):
 		weapon_select.add(item)
 	elif item["type"] == "ability":
 		ability_select.add(item)
+		ability_select.add(item)
 
-func handle_player_first_move():
-	var move_tutorial = player.tutorials.get_node_or_null("MovementTutorial")
-	if move_tutorial and is_instance_valid(move_tutorial):
-		move_tutorial.dismiss()
+#func handle_player_first_move():
+#	var move_tutorial = player.tutorials.get_node_or_null("MovementTutorial")
+#	if move_tutorial and is_instance_valid(move_tutorial):
+#		move_tutorial.dismiss()
 
 func show_tutorial(tutorial_name):
 	var tutorial = player.tutorials.get_node_or_null(tutorial_name)

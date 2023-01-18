@@ -229,11 +229,10 @@ extents = Vector2( 5, 1.5 )
 z_index = 1
 collision_layer = 2
 script = ExtResource( 2 )
-move_speed = 10
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
-animation = "hit"
+animation = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -1, 5 )

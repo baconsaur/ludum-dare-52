@@ -58,11 +58,14 @@ margin_bottom = 232.0
 visible = false
 
 [node name="WeaponSelect" parent="CanvasLayer/UI/HUD" instance=ExtResource( 8 )]
+keyboard_control = "D"
 
 [node name="AbilitySelect" parent="CanvasLayer/UI/HUD" instance=ExtResource( 9 )]
+keyboard_control = "A"
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 0, 176 )
+move_speed = 300
 
 [node name="Camera" type="Camera2D" parent="Player"]
 current = true
@@ -73,6 +76,7 @@ position = Vector2( -32, -24 )
 z_index = 10
 
 [node name="MovementTutorial" parent="Player/Tutorial" instance=ExtResource( 17 )]
+visible = false
 script = ExtResource( 21 )
 
 [node name="AbilityTutorial" parent="Player/Tutorial" instance=ExtResource( 20 )]
